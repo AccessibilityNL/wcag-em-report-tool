@@ -5,11 +5,12 @@ angular.module('wcagReporter', [
     'ngRoute',
     'ngAnimate',
     'pascalprecht.translate',
-    'wert-templates'
+    'wert-templates',
+    'textAngular'
 ]).config(function ($routeProvider, $compileProvider) {
 
     $compileProvider
-    .aHrefSanitizationWhitelist(/^\s*(https?|data|blob):/);
+        .aHrefSanitizationWhitelist(/^\s*(https?|data|blob):/);
 
     $routeProvider.when('/', {
         templateUrl: 'views/start.html',
@@ -44,5 +45,3 @@ angular.module('wcagReporter', [
         redirectTo: '/error'
     });
 });
-
-
