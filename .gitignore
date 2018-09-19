@@ -12,3 +12,4 @@ Thumbs.db
 /.project
 npm-debug.log
 .DS_Store
+.vscode
