@@ -5,11 +5,51 @@ angular.module('wcagReporter', [
     'ngRoute',
     'ngAnimate',
     'pascalprecht.translate',
-    'wert-templates'
-]).config(function ($routeProvider, $compileProvider) {
+    'wert-templates',
+    'textAngular'
+]).config(function ($routeProvider, $compileProvider, $provide) {
+
+    const buildCheckAction = (labelClass, text) => {
+        return function () {
+            this.$editor().wrapSelection(
+                'insertHTML',
+                `<span class="label label-${labelClass} label-xs">${text}</span>&nbsp;`);
+        }
+    }
+
+    $provide.decorator('taOptions', [
+        'taRegisterTool', '$delegate', function (taRegisterTool, taOptions) {
+            taRegisterTool('checkOK', {
+                iconclass: 'fa fa-fw fa-check text-success',
+                action: buildCheckAction('success', 'Pasa')
+            });
+
+            taRegisterTool('checkFail', {
+                iconclass: 'fa fa-fw fa-times text-danger',
+                action: buildCheckAction('danger', 'Falla')
+            });
+
+            taRegisterTool('checkUntested', {
+                iconclass: 'fa fa-fw fa-warning text-warning',
+                action: buildCheckAction('warning', 'No testeado')
+            });
+
+            taRegisterTool('checkMissing', {
+                iconclass: 'fa fa-fw fa-circle-o text-info',
+                action: buildCheckAction('info', 'No presente')
+            });
+
+            taRegisterTool('checkUndecided', {
+                iconclass: 'fa fa-fw fa-question',
+                action: buildCheckAction('default', 'No decide')
+            });
+
+            return taOptions;
+        }
+    ]);
 
     $compileProvider
-    .aHrefSanitizationWhitelist(/^\s*(https?|data|blob):/);
+        .aHrefSanitizationWhitelist(/^\s*(https?|data|blob):/);
 
     $routeProvider.when('/', {
         templateUrl: 'views/start.html',
@@ -44,5 +84,3 @@ angular.module('wcagReporter', [
         redirectTo: '/error'
     });
 });
-
-
