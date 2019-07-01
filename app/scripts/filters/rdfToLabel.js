@@ -12,6 +12,8 @@ angular.module('wcagReporter')
 		'A': 'LEVEL_A',
 		'AA': 'LEVEL_AA',
 		'AAA': 'LEVEL_AAA',
+    'wai:WCAG2.0-Version': 'VERSION_20',
+    'wai:WCAG2.1-Version': 'VERSION_21',
 		'wai:WCAG2A-Conformance': 'LEVEL_A',
 		'wai:WCAG2AA-Conformance': 'LEVEL_AA',
 		'wai:WCAG2AAA-Conformance': 'LEVEL_AAA'

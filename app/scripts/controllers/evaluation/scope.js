@@ -7,6 +7,13 @@ function ($scope, appState, evalScopeModel,
     $scope.state      = appState.moveToState('scope');
     $scope.scopeModel = evalScopeModel;
 
+    $scope.versionOptions = evalScopeModel.versionOptions
+      .reduce(function (versions, version) {
+        versions[version] = $filter('rdfToLabel')(version);
+
+        return versions;
+      }, {});
+
     $scope.conformanceOptions = evalScopeModel.conformanceOptions
     .reduce(function (tgt, lvl) {
         tgt[lvl] = $filter('rdfToLabel')(lvl);

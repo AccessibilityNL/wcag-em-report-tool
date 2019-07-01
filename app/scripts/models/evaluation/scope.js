@@ -4,11 +4,12 @@ angular.module('wcagReporter')
 .service('evalScopeModel', function() {
     var scopeModel = {
         type: 'EvaluationScope',
-    	conformanceTarget: 'wai:WCAG2AA-Conformance',
+        versionTarget: 'wai:WCAG2.1-Version',
+    	  conformanceTarget: 'wai:WCAG2AA-Conformance',
         additionalEvalRequirement: '',
         website: {
             type: ['TestSubject', 'WebSite'],
-            'id': '_:website',
+            "id": '_:website',
             siteName: '',
             siteScope: '' },
         accessibilitySupportBaseline: ''
@@ -17,6 +18,7 @@ angular.module('wcagReporter')
     scopeModel.exportData = function () {
         return {
             type: scopeModel.type,
+            versionTarget: scopeModel.versionTarget,
             conformanceTarget: scopeModel.conformanceTarget,
             additionalEvalRequirement: scopeModel.additionalEvalRequirement,
             website: {
@@ -28,6 +30,11 @@ angular.module('wcagReporter')
             accessibilitySupportBaseline: scopeModel.accessibilitySupportBaseline
         };
     };
+
+    scopeModel.versionOptions = [
+        'wai:WCAG2.1-Version',
+        'wai:WCAG2.0-Version'
+    ];
 
     scopeModel.conformanceOptions = [
         'wai:WCAG2A-Conformance',
