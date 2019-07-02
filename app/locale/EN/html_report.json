@@ -5,6 +5,7 @@
     "HD_SCOPE": "Scope of the evaluation",
     "LABEL_SITE_NAME": "Website name",
     "LABEL_SITE_SCOPE": "Scope of the website",
+    "LABEL_VERSION_TARGET": "WCAG version",
     "LABEL_CONFORMANCE_TGT": "Conformance target",
     "LABEL_EXTRA_REQUIREMENTS": "Additional evaluation requirements",
     "LABEL_SUPPORT_BASE": "Accessibility support baseline",
