@@ -49,6 +49,10 @@ angular.module('wcagReporter')
         return [];
     };
 
+    scopeModel.matchVersionTarget = function (versions) {
+        return versions.indexOf(scopeModel.versionTarget) >= 0;
+    };
+
     scopeModel.matchConformTarget = function (level) {
         return scopeModel.conformanceTarget.length >= level.length;
     };

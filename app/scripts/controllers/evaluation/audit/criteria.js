@@ -44,16 +44,18 @@ wcag2spec, $rootElement, $anchorScroll, $filter, $rootScope, $timeout) {
 
     } else {
     	$scope.critFilter = {
-            'wai:WCAG2A-Conformance': evalScopeModel.matchConformTarget('wai:WCAG2A-Conformance'),
-            'wai:WCAG2AA-Conformance': evalScopeModel.matchConformTarget('wai:WCAG2AA-Conformance'),
-            'wai:WCAG2AAA-Conformance': evalScopeModel.matchConformTarget('wai:WCAG2AAA-Conformance'),
+            'level': evalScopeModel.matchConformTarget,
+            'version': evalScopeModel.matchVersionTarget,
 		};
     	$rootScope.rootHide.criteria = $scope.critFilter;
     }
 
     $scope.isCriterionVisible = function (critSpec) {
 		// Check if the level of this criterion should be shown
-    	if ($scope.critFilter[critSpec.level] !== true) {
+    	if (
+        $scope.critFilter.version(critSpec.versions) === false
+        || $scope.critFilter.level(critSpec.level) === false
+      ) {
     		return false;
     	}
 

@@ -68,10 +68,13 @@ angular.module('wcagReporter')
             criteria.forEach(function (criterion) {
                 if (['A', 'AA', 'AAA'].indexOf(criterion.level) !== -1) {
                     criterion.level = 'wai:WCAG2' + criterion.level + '-Conformance';
+                    criterion.versions = criterion.versions.map(function (version) {
+                      return 'wai:WCAG' + version + '-Version';
+                    });
                     criteriaObj[criterion.id] = criterion;
                 }
             });
-            
+
             broadcast('wcag2spec:langChange', lang);
         },
 
@@ -86,7 +89,7 @@ angular.module('wcagReporter')
         },
         getPrinciples: function () {
             return currentSpec.principles;
-        }, 
+        },
         isLoaded: function () {
             return (typeof currentSpec !== 'undefined');
         },
