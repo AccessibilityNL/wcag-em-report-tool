@@ -4,18 +4,51 @@ angular.module('wcagReporter')
 .controller('AuditCriteriaCtrl', function ($scope, evalAuditModel, evalScopeModel,
 wcag2spec, $rootElement, $anchorScroll, $filter, $rootScope, $timeout) {
     var principlesOrigin = [];
+    var scFilters = {
+      levels: evalScopeModel.conformanceOptions
+        .filter(evalScopeModel.matchConformTarget)
+        .map(function (level) {
+          var label = $filter('rdfToLabel')(level);
+          return {
+            id: label.toLowerCase().replace(' ', '_'),
+            label: label,
+            rdf: level,
+          };
+        }),
+      versions: evalScopeModel.versionOptions
+        .map(function (version) {
+          var label = $filter('rdfToLabel')(version);
+          return {
+            id: label.toLowerCase().replace(' ', '_'),
+            label: label,
+            rdf: version,
+          };
+        }),
+    }
+    $scope.scFilters = {};
+    $scope.versions = [];
+    $scope.levels = [];
 
     $scope.criteria = evalAuditModel.getCriteriaSorted();
 
     $scope.getCritAssert = evalAuditModel.getCritAssert;
 
+    // If there is only one filter item it has no use to add it
+    if (scFilters.levels.length > 1) {
+      $scope.levels = scFilters.levels;
+    }
+
+    if (evalScopeModel.versionTarget.indexOf('2.0') === -1) {
+      $scope.versions = scFilters.versions;
+    }
+
+    if ($scope.versions.length || $scope.levels.length) {
+      $scope.showScFilters = true;
+    }
+
     function buildPrinciples(target, origin) {
         var tgtPrinciple  = origin[target.length];
         target.push(tgtPrinciple);
-
-        // tgtPrinciple.guidelines.forEach(function (g) {
-        //     g.hideCriteria = true;
-        // });
 
         if (target.length !== origin.length) {
             $timeout(function () {
@@ -40,31 +73,45 @@ wcag2spec, $rootElement, $anchorScroll, $filter, $rootScope, $timeout) {
 
 
     if ($rootScope.rootHide.criteria) {
-    	$scope.critFilter = $rootScope.rootHide.criteria;
+    	$scope.scFilters = $rootScope.rootHide.criteria;
 
     } else {
-    	$scope.critFilter = {
-            'level': evalScopeModel.matchConformTarget,
-            'version': evalScopeModel.matchVersionTarget,
-		};
-    	$rootScope.rootHide.criteria = $scope.critFilter;
+    	scFilters.versions
+        .concat(scFilters.levels)
+        .forEach(function (filter) {
+          $scope.scFilters[filter.rdf] = true;
+        });
+
+    	$rootScope.rootHide.criteria = $scope.scFilters;
     }
 
     $scope.isCriterionVisible = function (critSpec) {
 		// Check if the level of this criterion should be shown
+      var critAssert = evalAuditModel.getCritAssert(critSpec.id);
+
+      // Check WCAG targets
     	if (
-        $scope.critFilter.version(critSpec.versions) === false
-        || $scope.critFilter.level(critSpec.level) === false
+        evalScopeModel.matchVersionTarget(critSpec.versions) === false
+        || evalScopeModel.matchConformTarget(critSpec.level) === false
       ) {
     		return false;
     	}
 
-        // Check if the assert has an outcome, if no, don't show the criterion
-        var critAssert = evalAuditModel.getCritAssert(critSpec.id);
-        if (typeof critAssert !== 'object' ||
-        typeof critAssert.result !== 'object') {
-            return false;
-        }
+      // Check active filters
+      if (
+        critSpec.versions.reduce(function (outcome, version) {
+          return outcome || !$scope.scFilters[version];
+        }, false)
+        || $scope.scFilters[critSpec.level] === false
+      ) {
+        return false
+      }
+
+      // Check if the assert has an outcome, if no, don't show the criterion
+      if (typeof critAssert !== 'object' ||
+      typeof critAssert.result !== 'object') {
+          return false;
+      }
 
 		// Check if the outcome is set to hidden
     	return true;
