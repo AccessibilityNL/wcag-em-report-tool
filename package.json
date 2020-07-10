@@ -1,13 +1,11 @@
 {
     "name": "WCAG-EM-Report-Tool",
     "version": "2.0.1",
-    "repository":
-    {
+    "repository": {
         "type": "git",
         "url": "git://github.com/w3c/wcag-em-report-tool.git"
     },
-    "devDependencies":
-    {
+    "devDependencies": {
         "eslint": "^6.2.2",
         "eslint-config-standard": "^14.1.0",
         "eslint-plugin-import": "^2.18.2",
@@ -19,12 +17,10 @@
         "stylelint-config-standard": "^18.3.0",
         "stylelint-scss": "^3.10.0"
     },
-    "engines":
-    {
+    "engines": {
         "node": ">=12.18.0 <13.0.0"
     },
-    "scripts":
-    {
+    "scripts": {
         "development": "npx parcel serve ./app/views/**/*.html --open",
         "build": "npx parcel build ./app/views/**/*.html"
     }
