@@ -1,11 +1,47 @@
+---
+title: "Website Accessibility Evaluation Report Generator"
+sections:
+  a:
+    title: "What this tool does"
+    contents: >
+      <p>
+        This tool helps you generate a report according to the
+        <a href="http://www.w3.org/TR/WCAG-EM/"
+          >Website Accessibility Conformance Evaluation Methodology
+          (WCAG-EM)</a
+        >. It does not perform any accessibility checks. It helps you follow
+        the steps of WCAG-EM, to generate a
+        <a href="/evaluation/view-report">structured report</a> from the input that you
+        provide. It is designed for experienced evaluators who know
+        <a href="http://www.w3.org/WAI/standards-guidelines/wcag/"
+          >Web Content Accessibility Guidelines (WCAG) 2</a
+        >
+        and are somewhat familiar with WCAG-EM. For an introduction to
+        WCAG-EM, see the
+        <a href="http://www.w3.org/WAI/test-evaluate/conformance/wcag-em/"
+          >WCAG-EM Overview</a
+        >.
+      </p>
+      <p>
+        <strong>Note:</strong> This tool does not automatically save the
+        information that you enter. To save your data in a file locally on
+        your computer, use Windows shortcut keys Ctrl+S or Mac shortcut keys
+        ⌘S to open the Save dialog. (Or the 'Save' link at the top of the page
+        will open the Save Evaluation Report page and from there the 'Save
+        data file locally to your computer' link will open the Save dialog.)
+      </p>
+---
+
 {% extends "layouts/base.njk" %}
 
 {% block mainContent %}
 <h1>
-  Website Accessibility Evaluation Report Generator
+  {{ title }}
 </h1>
 
 <h2><a href="#start1">What this tool does</a></h2>
+{{ sections.a.title }}
+{{ sections.a.contents | safe }}
 <div id="start1" tabindex="-1">
   <p>
     This tool helps you generate a report according to the
@@ -14,7 +50,7 @@
       (WCAG-EM)</a
     >. It does not perform any accessibility checks. It helps you follow
     the steps of WCAG-EM, to generate a
-    <a href="#!/view_report">structured report</a> from the input that you
+    <a href="/evaluation/view-report">structured report</a> from the input that you
     provide. It is designed for experienced evaluators who know
     <a href="http://www.w3.org/WAI/standards-guidelines/wcag/"
       >Web Content Accessibility Guidelines (WCAG) 2</a
