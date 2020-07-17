@@ -1,21 +1,23 @@
 # npm
+npm-debug.log
 node_modules
 
-# parcel
+# Project
+_build
 .tmp
 .sass-cache
-app/bower_components
-app/styles/bootstrap
-dist/
+angularjs-app/app/bower_components
+angularjs-app/app/styles/bootstrap
+.cache
+
+# OS/Application specific files
 .sublime-project
 .sublime-workspace
 .dropbox
 desktop.ini
 Thumbs.db
 /.project
-npm-debug.log
 .DS_Store
-.cache
 
 # dev mode disable package.lock
 package-lock.json
