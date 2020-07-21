@@ -307,20 +307,14 @@
     ></textarea>
   </div>
 </form>
+{% endblock %}
 
-<nav src="'views/step-buttons.html'">
-  <ul>
-    <li>
-      <button>
-        Previous step: Start
-      </button>
-    </li>
+{% block relatedPages %}
+  <a class="button button-secondary" href="/" rel="prev">
+    Previous step: Start
+  </a>
 
-    <li>
-      <button>
-        Next step: Explore Website
-      </button>
-    </li>
-  </ul>
-</nav>
+  <a class="button" href="/evaluation/explore/" rel="next">
+    Next step: Explore Website
+  </a>
 {% endblock %}
