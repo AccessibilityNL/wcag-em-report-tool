@@ -1,0 +1,37 @@
+{#
+  formfield:
+  use with include within a forloop, like:
+    {% for field in fields %}
+      {% include "components/formcomponents/formfield.njk" %}
+    {% endfor %}
+#}
+{% set id = field.id %}
+{% set label = field.label %}
+{% set Description = field.Description %}
+{% set Input = field.Input %}
+
+<div class="field">
+
+  {# label: required with id #}
+  {% if label and id %}
+    <label for="{{ id }}" class="field__label">
+      {{ label }}
+    </label>
+  {% endif %}
+
+  {# Description: optional | This is the helptext if supplied #}
+  {% if Description %}
+    <div class="field__description">
+      {# HTML allowed #}
+      {{ Description | safe }}
+    </div>
+  {% endif %}
+
+  {# Input: required | This should be an htmlFormElement #}
+  {% if Input %}
+    {{ Input | safe }}
+  {% else if id %}
+    {# Default to a simple textinput if an id is given #}
+    <input type="text" id="{{ id }}">
+  {% endif %}
+</div>
