@@ -1,312 +1,138 @@
 {% extends "layouts/evaluation.njk" %}
 
-{% block title %}Define evaluation scope | {{ super() }}{% endblock %}
+{% block title %}Define evaluation scope |
+  {{ super() }}
+{% endblock %}
 
 {% block mainContent %}
-<h1>
-  Step 1: Define the Evaluation Scope
-</h1>
-<p
-  ng-bind-html="'SCOPE.INTRO' | translate: {
-    link_step1: 'http://www.w3.org/TR/WCAG-EM/#step1'
-  }"
->
-  Define the overall parameters and scope of the evaluation. Ideally, this
-  is done with the person who commissioned the evaluation (who may or may
-  not be the website owner), to ensure common expectations about the scope
-  of the evaluation. More guidance on this step is provided in
-  <a href="http://www.w3.org/TR/WCAG-EM/#step1"
-    >WCAG-EM Step 1: Define the Evaluation Scope</a
-  >.
-</p>
-<form>
-  <div>
-    <label for="site-name">
-      Website name<a
-        href=""
-        label="Info expand"
-        target="inf_site_name"
-        title="Website name"
-        ><span>Info expand</span></a
-      >
-    </label>
-    <div
-      id="inf_site_name"
-      tabindex="-1"
-      button="Close info"
-      exitto="site-name"
-      ref="inf_site_name"
-    >
-      <div>
-        <p ng-bind-html="'SCOPE.INF_SITE_NAME' | translate">
-          Provide a name for the website that you would like to evaluate.
-          For example:<br />
-          'Public Website of Example Organization'<br />
-          'Webshop of Example Company'<br />
+  <h1>
+    Step 1: Define the Evaluation Scope
+  </h1>
+  <p >
+    Define the overall parameters and scope of the evaluation. Ideally, this is done with the person who commissioned the evaluation (who may or may not be the website owner), to ensure common expectations about the scope of the evaluation. More guidance
+    on this step is provided in
+    <a href="http://www.w3.org/TR/WCAG-EM/#step1">WCAG-EM Step 1: Define the Evaluation Scope</a >.
+  </p>
+
+  <form>
+    <div class="field">
+      <label for="siteName" class="field__label">
+        Website name
+      </label>
+      <div class="field__description">
+        <p>
+          Provide a name for the website that you would like to evaluate. For example:<br/>
+          'Public Website of Example Organization'<br/>
+          'Webshop of Example Company'<br/>
           'Intranet of Example University'
         </p>
       </div>
-      <button>
-        <span>Close info</span>
-      </button>
+      <input id="siteName" type="text"/>
     </div>
-    <input type="text" id="site-name" />
-  </div>
-  <div>
-    <label for="website_scope">
-      Scope of the website<a
-        href=""
-        label="Info expand"
-        target="inf_site_scope"
-        title="Scope of the website"
-        ><span>Info expand</span></a
-      >
-    </label>
-    <div
-      id="inf_site_scope"
-      tabindex="-1"
-      button="Close info"
-      exitto="website_scope"
-      ref="inf_site_scope"
-    >
-      <div>
+
+    <div class="field">
+      <label for="siteScope" class="field__label">
+        Scope of the website
+      </label>
+      <div class="field__description">
         <p>
-          Define the scope of the website, so it is clear which web pages
-          are included in the evaluation. For example:
+          Define the scope of the website, so it is clear which web pages are included in the evaluation. For example:
         </p>
         <ul>
           <li>
-            'All web content of the public website of Example Org. located
-            at http://www.example.org'
+            'All web content of the public website of Example Org. located at http://www.example.org'
           </li>
           <li>
-            'All web content of the online shop of Example Org. located at
-            http://www.example.org/shop/'
+            'All web content of the online shop of Example Org. located at http://www.example.org/shop/'
           </li>
           <li>
-            'All web content of the mobile version of the public website
-            of Example Org. located at http://m.example.org'
+            'All web content of the mobile version of the public website of Example Org. located at http://m.example.org'
           </li>
         </ul>
-        <p
-          ng-bind-html="'COMMON.MORE_INFO' | translate: {
-  url: 'http://www.w3.org/TR/WCAG-EM/#step1a',
-  name: translate('SCOPE.INF_SITE_SCOPE_1')
-}"
-        >
+        <p >
           For more information, see
-          <a href="http://www.w3.org/TR/WCAG-EM/#step1a"
-            >WCAG-EM Step 1.a: Define the Scope of the Website</a
-          >.
+          <a href="http://www.w3.org/TR/WCAG-EM/#step1a">WCAG-EM Step 1.a: Define the Scope of the Website</a >.
         </p>
       </div>
-      <button>
-        <span>Close info</span>
-      </button>
+      <textarea id="siteScope" rows="3"></textarea>
     </div>
-    <textarea
-      id="website_scope"
-      auto-resize=""
-      cols="40"
-      rows="3"
-    ></textarea>
-  </div>
-  <div>
-    <label for="version_target">
-      WCAG Version
-      <a
-        href=""
-        label="Info expand"
-        target="info_wcag_version"
-        title="SCOPE.LABEL_VERSION"
-        ><span>Info expand</span></a
-      >
-    </label>
-    <div
-      id="info_wcag_version"
-      tabindex="-1"
-      button="Close info"
-      exitto="wcag_version"
-      ref="info_wcag_version"
-    >
-      <div>
-        <p ng-bind-html="'SCOPE.INFO_WCAG_VERSION' | translate">
+
+    <div class="field">
+      <label for="wcagVersion" class="field__label">
+        WCAG Version
+      </label>
+      <div class="field__description">
+        <p>
           Select the WCAG version to use. Version 2.1 (default) or 2.0
         </p>
       </div>
-      <button>
-        <span>Close info</span>
-      </button>
+      <select id="wcagVersion">
+        <option label="WCAG 2.1" value="WCAG21" selected="selected">WCAG 2.1</option >
+        <option label="WCAG 2.0" value="WCAG20">WCAG 2.0</option >
+      </select >
     </div>
-    <select id="wcag_version"
-      ><option label="WCAG 2.1" value="string:WCAG21" selected="selected"
-        >WCAG 2.1</option
-      ><option label="WCAG 2.0" value="string:WCAG20"
-        >WCAG 2.0</option
-      ></select
-    >
-  </div>
-  <div>
-    <label for="conformance_target">
-      Conformance target<a
-        href=""
-        label="Info expand"
-        target="inf_conf_tgt"
-        title="Conformance target"
-        ><span>Info expand</span></a
-      >
-    </label>
-    <div
-      id="inf_conf_tgt"
-      tabindex="-1"
-      button="Close info"
-      exitto="conformance_target"
-      ref="inf_conf_tgt"
-    >
-      <div>
-        <p
-          ng-bind-html="'SCOPE.INF_CONF_TGT' | translate: {
-  'link_em_1b': 'http://www.w3.org/TR/WCAG-EM/#step1b'
-}"
-        >
-          Select a target WCAG 2 conformance level ('A', 'AA', or 'AAA')
-          for the evaluation. For more information, see
-          <a href="http://www.w3.org/TR/WCAG-EM/#step1b"
-            >WCAG-EM Step 1.b: Define the Conformance Target</a
-          >. This selection determines which conformance level filters are
-          active by default in 'step 4: Audit the Sample'.
+
+    <div class="field">
+      <label for="conformanceTarget" class="field__label">
+        Conformance target
+      </label>
+      <div class="field__description">
+        <p >
+          Select a target WCAG 2 conformance level ('A', 'AA', or 'AAA') for the evaluation. For more information, see
+          <a href="http://www.w3.org/TR/WCAG-EM/#step1b">WCAG-EM Step 1.b: Define the Conformance Target</a >. This selection determines which conformance level filters are active by default in 'step 4: Audit the Sample'.
         </p>
       </div>
-      <button>
-        <span>Close info</span>
-      </button>
+      <select id="conformanceTarget">
+        <option label="Level A" value="A">Level A</option >
+        <option label="Level AA" value="AA" selected="selected">Level AA</option >
+        <option label="Level AAA" value="AAA">Level AAA</option >
+      </select >
     </div>
-    <select id="conformance_target"
-      ><option label="Level A" value="string:wai:WCAG2A-Conformance"
-        >Level A</option
-      ><option
-        label="Level AA"
-        value="string:wai:WCAG2AA-Conformance"
-        selected="selected"
-        >Level AA</option
-      ><option label="Level AAA" value="string:wai:WCAG2AAA-Conformance"
-        >Level AAA</option
-      ></select
-    >
-  </div>
-  <div>
-    <label for="as_baseline">
-      Accessibility support baseline<a
-        href=""
-        label="Info expand"
-        target="inf_support_base"
-        title="Accessibility support baseline"
-        ><span>Info expand</span></a
-      >
-    </label>
-    <div
-      id="inf_support_base"
-      tabindex="-1"
-      button="Close info"
-      exitto="as_baseline"
-      ref="inf_support_base"
-    >
-      <div>
-        <p
-          ng-bind-html="'SCOPE.INF_SUPPORT_BASE' | translate: {
-  link_user_agent: 'http://www.w3.org/TR/WCAG20/#useragentdef',
-  link_access_supp: 'http://www.w3.org/TR/WCAG20/#accessibility-supporteddef',
-  link_em_step1c: 'http://www.w3.org/TR/WCAG-EM/#step1c'
-}"
-        >
+
+    <div class="field">
+      <label for="accessibilitySupportBaseline" class="field__label">
+        Accessibility support baseline
+      </label>
+      <div class="field__description">
+        <p>
           Define the web browsers, assistive technologies, and other
-          <a href="http://www.w3.org/TR/WCAG20/#useragentdef"
-            >user agents</a
-          >
+          <a href="http://www.w3.org/TR/WCAG20/#useragentdef">user agents</a >
           that will be
-          <a
-            href="http://www.w3.org/TR/WCAG20/#accessibility-supporteddef"
-            >accessibility supported</a
-          >
-          by the website. For example, 'Internet Explorer (IE) with JAWS',
-          'FireFox with NVDA', and 'Apple with VoiceOver' could be basic
-          definitions. For more information, see
-          <a href="http://www.w3.org/TR/WCAG-EM/#step1c"
-            >WCAG-EM Step 1.c: Define an Accessibility Support Baseline</a
-          >.
+          <a href="http://www.w3.org/TR/WCAG20/#accessibility-supporteddef">accessibility supported</a >
+          by the website. For example, 'Internet Explorer (IE) with JAWS', 'FireFox with NVDA', and 'Apple with VoiceOver' could be basic definitions. For more information, see
+          <a href="http://www.w3.org/TR/WCAG-EM/#step1c">WCAG-EM Step 1.c: Define an Accessibility Support Baseline</a >.
         </p>
       </div>
-      <button>
-        <span>Close info</span>
-      </button>
+      <textarea id="accessibilitySupportBaseline" rows="5"></textarea>
     </div>
-    <textarea
-      id="as_baseline"
-      auto-resize=""
-      cols="40"
-      rows="5"
-    ></textarea>
-  </div>
-  <div>
-    <label for="additional_requirements">
-      Additional evaluation requirements<a
-        href=""
-        label="Info expand"
-        target="inf_extra_req"
-        title="Additional evaluation requirements"
-        ><span>Info expand</span></a
-      >
-    </label>
-    <div
-      id="inf_extra_req"
-      tabindex="-1"
-      button="Close info"
-      exitto="additional_requirements"
-      ref="inf_extra_req"
-    >
-      <div>
+
+    <div class="field">
+      <label for="additionalRequirements" class="field__label">
+        Additional evaluation requirements
+      </label>
+      <div class="field__description">
         <p>
           Define any additional evaluation requirements. For example:
         </p>
         <ul>
           <li>
-            'The report will include a list of all errors identified by
-            the evaluator, rather than examples only'
+            'The report will include a list of all errors identified by the evaluator, rather than examples only'
           </li>
           <li>
-            'The report will include a description of the problem and
-            repair suggestions for any errors listed'
+            'The report will include a description of the problem and repair suggestions for any errors listed'
           </li>
           <li>
-            'The evaluation will cover all web pages and web content of
-            the website, rather than a selected sample only'
+            'The evaluation will cover all web pages and web content of the website, rather than a selected sample only'
           </li>
         </ul>
-        <p
-          ng-bind-html="'COMMON.MORE_INFO' | translate: {
-  url: 'http://www.w3.org/TR/WCAG-EM/#step1d',
-  name: translate('SCOPE.INF_EXTRA_REQUIREMENTS_1')
-}"
-        >
+        <p >
           For more information, see
-          <a href="http://www.w3.org/TR/WCAG-EM/#step1d"
-            >WCAG-EM Step 1.d: Define Additional Evaluation
-            Requirements</a
-          >.
+          <a href="http://www.w3.org/TR/WCAG-EM/#step1d">WCAG-EM Step 1.d: Define Additional Evaluation Requirements</a >.
         </p>
       </div>
-      <button>
-        <span>Close info</span>
-      </button>
+      <textarea id="additionalRequirements" rows="5"></textarea>
     </div>
-    <textarea
-      id="additional_requirements"
-      auto-resize=""
-      cols="40"
-      rows="5"
-    ></textarea>
-  </div>
-</form>
+  </form>
 {% endblock %}
 
 {% block relatedPages %}
