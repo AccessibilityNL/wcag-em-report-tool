@@ -6,6 +6,7 @@ module.exports = function (eleventyConfig) {
   return {
     dir: {
       input: "app/views",
+      data: "../_data",
       includes: "../_includes",
       output: "_build"
     }
