@@ -1,0 +1,15 @@
+{# Textarea(data) #}
+{% macro Textarea(data) %}
+
+  {% set id = data.id %}
+  {% set rows = data.rows %}
+
+  {% set attributes = ([' ',
+    'id=' + id if id,
+    'rows=' + rows if rows else 'rows=5'
+    ].join(' ')
+  ) %}
+
+  <textarea{{ attributes }}></textarea>
+
+{% endmacro %}

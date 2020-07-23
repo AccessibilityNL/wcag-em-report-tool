@@ -1,0 +1,20 @@
+{# Select(data) #}
+{% from "./Option.njk" import Option %}
+
+{% macro Select(data) %}
+
+  {% set id = data.id %}
+  {% set options = data.options %}
+
+  {% set attributes = ([' ',
+    'id=' + id if id
+    ].join(' ')
+  ) %}
+
+  <select{{ attributes }}>
+    {% for option in options %}
+      {{ Option(option) }}
+    {% endfor %}
+  </select>
+
+{% endmacro %}

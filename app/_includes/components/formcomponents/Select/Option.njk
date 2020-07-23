@@ -1,0 +1,18 @@
+{# Select/Option(data) #}
+{% macro Option(data) %}
+
+  {% set label = data.label %}
+  {% set id = data.id %}
+  {% set value = data.value %}
+  {% set selected = data.selected %}
+
+  {% set attributes = ([' ',
+    'id=' + id if id,
+    'value=' + value if value else label,
+    'selected' if selected
+    ].join(' ')
+  ) %}
+
+  <option{{ attributes }}>{{ label }}</option>
+
+{% endmacro %}
