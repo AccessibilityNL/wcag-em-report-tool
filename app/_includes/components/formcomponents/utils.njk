@@ -1,0 +1,25 @@
+{% from "components/formcomponents/Text.njk" import Text %}
+{% from "components/formcomponents/Textarea.njk" import Textarea %}
+{% from "components/formcomponents/Select/index.njk" import Select %}
+
+{% macro setInput(data) %}
+  {% set type = data.type %}
+
+  {% if type === "text" %}
+    {{ Text(data) }}
+  {% endif %}
+
+  {% if type === "textarea" %}
+    {{ Textarea(data) }}
+  {% endif %}
+
+  {% if type === "select" %}
+    {{ Select(data) }}
+  {% endif %}
+
+  {% if type === "checkbox" %}
+    <p class="info">
+      <strong>This should be a checkbox!</strong>
+    </p>
+  {% endif %}
+{% endmacro %}

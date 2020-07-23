@@ -1,0 +1,29 @@
+{% from "components/formcomponents/utils.njk" import setInput %}
+{% from "components/formcomponents/Field.njk" import Field %}
+
+{% macro Fieldset(data) %}
+
+  {% set legend = data.legend %}
+  {% set name = data.name %}
+  {% set fields = data.fields %}
+
+  <fieldset>
+    {% if legend %}
+      <legend>{{ legend }}</legend>
+    {% endif %}
+
+    {% for field in fields %}
+
+      {% set Input = setInput(field) %}
+      {% set type = field.type %}
+
+      {% if type === "fieldset" %}
+        {{ Fieldset(field) }}
+      {% else %}
+        {{ Field(field, Input) }}
+      {% endif %}
+    {% endfor %}
+
+  </fieldset>
+
+{% endmacro %}

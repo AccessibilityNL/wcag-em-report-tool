@@ -1,8 +1,7 @@
 {# Form(data) #}
+{% from "components/formcomponents/utils.njk" import setInput %}
 {% from "components/formcomponents/Field.njk" import Field %}
-{% from "components/formcomponents/Text.njk" import Text %}
-{% from "components/formcomponents/Textarea.njk" import Textarea %}
-{% from "components/formcomponents/Select/index.njk" import Select %}
+{% from "components/formcomponents/Fieldset.njk" import Fieldset %}
 
 {% macro Form(data) %}
 
@@ -12,22 +11,14 @@
 <form name="{{ title }}" title="{{ title }}">
 
   {% for field in fields %}
-    {% set Input = null %}
+    {% set Input = setInput(field) %}
     {% set type = field.type %}
 
-    {% if type === "text" %}
-      {% set Input = Text(field) %}
+    {% if type === "fieldset" %}
+      {{ Fieldset(field) }}
+    {% else %}
+      {{ Field(field, Input) }}
     {% endif %}
-
-    {% if type === "textarea" %}
-      {% set Input = Textarea(field) %}
-    {% endif %}
-
-    {% if type === "select" %}
-      {% set Input = Select(field) %}
-    {% endif %}
-
-    {{ Field(field, Input) }}
   {% endfor %}
 
 </form>
