@@ -1,3 +1,5 @@
+{% set menuBar = i18n[locale]['menu-bar'] %}
+
 <nav title="menu bar">
   <ul>
     <li>
@@ -7,22 +9,22 @@
     </li>
     <li>
       <a href="#open">
-        Open
+        {{ menuBar.open }}
       </a>
     </li>
     <li>
       <a href="#save">
-        Save
+        {{ menuBar.save }}
       </a>
     </li>
     <li>
       <a href="#import" title="Start EARL report import wizzard">
-        Import
+        {{ menuBar.import }}
       </a>
     </li>
     <li>
-      <p>Key resources</p>
-      <ul lang="en">
+      <p>{{ menuBar.resources }}</p>
+      <ul>
         <li>
           <a
             target="_blank"
@@ -50,7 +52,7 @@
       </ul>
     </li>
     <li>
-      <p>Language</p>
+      <p>{{ menuBar.language | default('Language') }}</p>
       <ul>
         <li lang="en">
           English
