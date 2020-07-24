@@ -24,8 +24,6 @@
   {% endif %}
 
   {% if type === "fieldset" %}
-    <p class="info">FIELDSET HERE</p>
-
     {% set Fields %}
       {% for field in data.fields %}
         {{ FormComponent(field) }}
