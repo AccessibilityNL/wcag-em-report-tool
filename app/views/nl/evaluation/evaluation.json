@@ -1,0 +1,3 @@
+{
+    "permalink": "/{{ locale }}/evaluation/{{ page.fileSlug }}/index.html"
+}

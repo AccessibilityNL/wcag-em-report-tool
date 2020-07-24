@@ -1,0 +1,29 @@
+{% extends "layouts/evaluation.njk" %}
+
+{% block title %}Define evaluation scope |
+  {{ super() }}
+{% endblock %}
+
+{% block mainContent %}
+  <h1>
+    Step 1: Define the Evaluation Scope
+  </h1>
+  <p >
+    Define the overall parameters and scope of the evaluation. Ideally, this is done with the person who commissioned the evaluation (who may or may not be the website owner), to ensure common expectations about the scope of the evaluation. More guidance
+    on this step is provided in
+    <a href="http://www.w3.org/TR/WCAG-EM/#step1">WCAG-EM Step 1: Define the Evaluation Scope</a >.
+  </p>
+
+  {{ Form(forms.scope) }}
+
+{% endblock %}
+
+{% block relatedPages %}
+  <a class="button button-secondary" href="/" rel="prev">
+    Previous step: Start
+  </a>
+
+  <a class="button" href="/evaluation/explore/" rel="next">
+    Next step: Explore Website
+  </a>
+{% endblock %}
