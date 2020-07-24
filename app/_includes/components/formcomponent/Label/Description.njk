@@ -1,0 +1,7 @@
+{# Description(data) #}
+{% macro Description(data) %}
+  <div class="field__description">
+    {# HTML allowed #}
+    {{ data | safe }}
+  </div>
+{% endmacro %}

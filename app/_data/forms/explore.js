@@ -4,6 +4,52 @@ module.exports = {
     {
       type: 'checkbox',
       id: 'technologiesReliedUpon',
+      options: [
+        {
+          label: 'HTML 5',
+          checked: false
+        },
+        {
+          label: 'XHTML 1.0',
+          checked: false
+        },
+        {
+          label: 'HTML 4.01',
+          checked: false
+        },
+        {
+          label: 'CSS',
+          checked: false
+        },
+        {
+          label: 'ARIA',
+          checked: false
+        },
+        {
+          label: 'JavaScript',
+          checked: false
+        },
+        {
+          label: 'Flash',
+          checked: false
+        },
+        {
+          label: 'Silverlight',
+          checked: false
+        },
+        {
+          label: 'OOXML',
+          checked: false
+        },
+        {
+          label: 'ODF 1.2',
+          checked: false
+        },
+        {
+          label: 'SVG',
+          checked: false
+        },
+      ],
       label: 'Technologies relied upon',
       Description: `
         <p>

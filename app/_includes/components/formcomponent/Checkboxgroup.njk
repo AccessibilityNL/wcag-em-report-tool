@@ -1,0 +1,32 @@
+{% macro Checkboxgroup(data) %}
+
+  {% set legend = data.label %}
+  {% set name = data.name %}
+  {% set options = data.options %}
+  {% set id = data.id %}
+
+  <fieldset id="{{ id }}" class="field">
+    {% if legend %}
+      <legend>{{ legend }}</legend>
+    {% endif %}
+
+    {% for option in options %}
+      {% set label = option.label %}
+      {% set value = option.value if option.value else label %}
+      {% set checkboxId = id + '__' + value %}
+
+      {# WAI css: radio-field #}
+      <div class="radio-field checkbox">
+        <input
+          id="{{ checkboxId }}"
+          type="checkbox"
+          name="{{ name }}"
+          value="{{ value }}"
+        >
+        <label for="{{ checkboxId }}">{{ label }}</label>
+      </div>
+    {% endfor %}
+
+  </fieldset>
+
+{% endmacro %}

@@ -1,0 +1,16 @@
+{% macro Fieldset(data, Children) %}
+
+  {% set id = data.id %}
+  {% set name = data.name %}
+  {% set legend = data.legend or name or id %}
+
+  <fieldset id="{{ id }}">
+    {% if legend %}
+      <legend>{{ legend }}</legend>
+    {% endif %}
+
+    {{ Children | safe }}
+
+  </fieldset>
+
+{% endmacro %}

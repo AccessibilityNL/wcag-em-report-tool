@@ -1,0 +1,37 @@
+{% from "./Checkboxgroup.njk" import Checkboxgroup %}
+{% from "./Fieldset.njk" import Fieldset %}
+{% from "./Text.njk" import Text %}
+{% from "./Textarea.njk" import Textarea %}
+{% from "./Select/index.njk" import Select %}
+
+{% macro FormComponent(data) %}
+  {% set type = data.type %}
+
+  {% if type === "text" %}
+    {{ Text(data) }}
+  {% endif %}
+
+  {% if type === "textarea" %}
+    {{ Textarea(data) }}
+  {% endif %}
+
+  {% if type === "select" %}
+    {{ Select(data) }}
+  {% endif %}
+
+  {% if type === "checkbox" %}
+    {{ Checkboxgroup(data) }}
+  {% endif %}
+
+  {% if type === "fieldset" %}
+    <p class="info">FIELDSET HERE</p>
+
+    {% set Fields %}
+      {% for field in data.fields %}
+        {{ FormComponent(field) }}
+      {% endfor %}
+    {% endset %}
+
+    {{ Fieldset(data, Fields) }}
+  {% endif %}
+{% endmacro %}

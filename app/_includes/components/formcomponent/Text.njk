@@ -1,0 +1,27 @@
+{# Field #}
+{% from "./Field.njk" import Field %}
+
+{# Label #}
+{% from "./Label/index.njk" import Label %}
+
+{# Text(data) #}
+{% macro Text(data) %}
+  {% set id = data.id %}
+
+  {% set attributes = ([' ',
+    'id=' + id if id
+    ].join(' ')
+  ) %}
+
+  {% set label = Label(data) %}
+
+  {% set Input %}
+  <input
+  type="text"
+  {{ attributes }}
+  >
+  {% endset %}
+
+  {# Compose Field #}
+  {{ Field(label, Input) }}
+{% endmacro %}

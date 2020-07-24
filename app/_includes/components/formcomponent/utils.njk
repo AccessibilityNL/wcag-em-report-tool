@@ -1,6 +1,7 @@
-{% from "components/formcomponents/Text.njk" import Text %}
-{% from "components/formcomponents/Textarea.njk" import Textarea %}
-{% from "components/formcomponents/Select/index.njk" import Select %}
+{% from "components/formcomponent/Checkboxgroup.njk" import Checkboxgroup %}
+{% from "components/formcomponent/Text.njk" import Text %}
+{% from "components/formcomponent/Textarea.njk" import Textarea %}
+{% from "components/formcomponent/Select/index.njk" import Select %}
 
 {% macro setInput(data) %}
   {% set type = data.type %}
@@ -18,8 +19,6 @@
   {% endif %}
 
   {% if type === "checkbox" %}
-    <p class="info">
-      <strong>This should be a checkbox!</strong>
-    </p>
+    {{ Checkboxgroup(data) }}
   {% endif %}
 {% endmacro %}

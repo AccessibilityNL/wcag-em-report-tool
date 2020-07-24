@@ -1,0 +1,16 @@
+{% from "./Description.njk" import Description %}
+
+{# Label(props, [Input]) #}
+{% macro Label(data) %}
+
+  {% set id = data.id %}
+  {% set label = data.label %}
+  {% set description = data.Description %}
+
+  <label for="{{ id }}" class="field__label">
+    {{ label }}
+  </label>
+  {% if description %}
+    {{ Description(description) }}
+  {% endif %}
+{% endmacro %}

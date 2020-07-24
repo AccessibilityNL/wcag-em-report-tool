@@ -1,0 +1,8 @@
+{# Field(LeftLabel, [Input], RightLabel) #}
+{% macro Field(LeftLabel, Input, RightLabel) %}
+  <div class="field">
+    {{ LeftLabel | safe }}
+    {{ Input | safe }}
+    {{ RightLabel | safe }}
+  </div>
+{% endmacro %}

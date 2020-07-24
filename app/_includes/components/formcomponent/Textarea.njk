@@ -1,0 +1,26 @@
+{# Field #}
+{% from "./Field.njk" import Field %}
+
+{# Label #}
+{% from "./Label/index.njk" import Label %}
+
+{# Textarea(data) #}
+{% macro Textarea(data) %}
+  {% set id = data.id %}
+  {% set rows = data.rows %}
+
+  {% set attributes = ([' ',
+    'id=' + id if id,
+    'rows=' + rows if rows else 'rows=5'
+    ].join(' ')
+  ) %}
+
+  {% set textarea %}
+    <textarea
+      {{ attributes }}
+    ></textarea>
+  {% endset %}
+
+  {{ Field(Label(data), textarea) }}
+
+{% endmacro %}

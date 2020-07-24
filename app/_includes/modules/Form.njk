@@ -1,25 +1,16 @@
-{# Form(data) #}
-{% from "components/formcomponents/utils.njk" import setInput %}
-{% from "components/formcomponents/Field.njk" import Field %}
-{% from "components/formcomponents/Fieldset.njk" import Fieldset %}
+{# Form(form) #}
+{% from "components/formcomponent/index.njk" import FormComponent %}
 
-{% macro Form(data) %}
+{% macro Form(form) %}
 
-{% set title = data.title %}
-{% set fields = data.fields %}
+  {% set title = form.title %}
+  {% set fields = form.fields %}
 
-<form name="{{ title }}" title="{{ title }}">
+  <form name="{{ title }}" title="{{ title }}">
 
-  {% for field in fields %}
-    {% set Input = setInput(field) %}
-    {% set type = field.type %}
+    {% for fieldData in fields %}
+      {{ FormComponent(fieldData) }}
+    {% endfor %}
 
-    {% if type === "fieldset" %}
-      {{ Fieldset(field) }}
-    {% else %}
-      {{ Field(field, Input) }}
-    {% endif %}
-  {% endfor %}
-
-</form>
+  </form>
 {% endmacro %}

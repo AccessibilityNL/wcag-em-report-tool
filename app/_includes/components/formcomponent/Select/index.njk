@@ -1,0 +1,30 @@
+{# Field #}
+{% from "../Field.njk" import Field %}
+
+{# Label #}
+{% from "../Label/index.njk" import Label %}
+
+{# Select(data) #}
+{% from "./Option.njk" import Option %}
+
+{% macro Select(data) %}
+
+  {% set id = data.id %}
+  {% set options = data.options %}
+
+  {% set attributes = ([' ',
+    'id=' + id if id
+    ].join(' ')
+  ) %}
+
+  {% set select %}
+    <select{{ attributes }}>
+      {% for option in options %}
+        {{ Option(option) }}
+      {% endfor %}
+    </select>
+  {% endset %}
+
+  {{ Field(Label(data), select) }}
+
+{% endmacro %}
