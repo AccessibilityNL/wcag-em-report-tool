@@ -11,7 +11,9 @@ Related resources:
 - [link to wai about wcag]()
 - [link to evaluation methodology]()
 
-The official released version of the Report Tool can be found at <http://www.w3.org/WAI/eval/report-tool/>. An example of the latest (unapproved by EO) version is available at <http://w3c.github.io/wcag-em-report-tool/dist/>.
+The official released version of the Report Tool can be found at <http://www.w3.org/WAI/eval/report-tool/>. An example of the last angular (unapproved by EO) version is available at <https://accessibilityNL.github.io/wcag-em-report-tool/angularjs-preview/>.
+
+A new preview version is available at <https://accessibilityNL.github.io/wcag-em-report-tool/sapper-preview/en/>.
 
 See [Change log](CHANGELOG.md) for details about the latest version of the WCAG-EM Report Tool.
 

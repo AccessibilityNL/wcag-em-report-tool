@@ -13,14 +13,14 @@ Updates are described as "(Feature|Chore|Bug|Issue) : (Solution|Description|Reas
 - Expanded documentation section: Help for translation, development and decisions documented.
 
 ### Changed
-- Project management: added Parcel bundler. Focus more on the project, rather than setup.
 - JavaScript App Framework Svelte/Sapper. Used the Sapper-template starter.
+- Renamed dist to angularjs; last angular version of the app.
 
 ### Deprecated
 ### Fixed
 
 ### Removed
-- AngularJS framework; This framework is too complex and all-inclusive for this type of projec  t. A new framework will be lighter and easier to grasp for starting developers so that it will be easier to be maintained. (Replaced with Svelte/Sapper)
+- AngularJS framework; This framework is too complex and all-inclusive for this type of project. A new framework will be lighter and easier to grasp for starting developers so that it will be easier to be maintained. (Replaced with Svelte/Sapper)
 - Grunt Task manager has been removed. Grunt does a great job in giving full control in app development, but as a downside this needs configuration and user awereness of all the available tools to manage your app development. Newer tools do a lot of the work automagically and give developers the opportunity to start asap on the project at hand and focus on the assets required for the project rather than assets for setup. Grunt will most likely be replaced with Parcel, a bundler without loads of configuration.
 
 ### Security
