@@ -1,7 +1,9 @@
 import babel from '@rollup/plugin-babel';
 import commonjs from '@rollup/plugin-commonjs';
+import copy from 'rollup-plugin-copy';
 import json from '@rollup/plugin-json';
 import livereload from 'rollup-plugin-livereload';
+import replace from '@rollup/plugin-replace';
 import resolve from '@rollup/plugin-node-resolve';
 import serve from 'rollup-plugin-serve';
 import svelte from 'rollup-plugin-svelte';
@@ -11,13 +13,21 @@ import pkg from './package.json';
 
 const production = !process.env.ROLLUP_WATCH;
 
+// You can add this env by using rollup's --environment cli flag;
+// Like: npm run dev -- --environment BASEPATH:"/some-server-subdir/"
+const BASEPATH = process.env.BASEPATH || '/';
+const PATHS = {
+  BUILD: `_site/build${BASEPATH}`,
+  DEV: `_site/development${BASEPATH}`
+};
+
 export default {
-  input: pkg.browser,
+  input: pkg.main,
   output: {
     sourcemap: true,
     format: 'esm',
     name: pkg.name,
-    dir: production ? `public/${pkg.version}` : 'public/dev'
+    dir: `${production ? PATHS.BUILD : PATHS.DEV}bundles`
   },
   plugins: [
     svelte({
@@ -26,8 +36,56 @@ export default {
       // we'll extract any component CSS out into
       // a separate file - better for performance
       css: (css) => {
-        css.write('bundle.css');
+        css.write('app.css');
       }
+    }),
+
+    copy({
+      targets: [
+        {
+          // Styles
+          src: 'src/static/css/**/*.css',
+          dest: `${production ? PATHS.BUILD : PATHS.DEV}css`
+        },
+        {
+          // Images
+          src: 'src/static/**/*.{svg,png,jpeg,jpg}',
+          dest: `${production ? PATHS.BUILD : PATHS.DEV}images`
+        },
+        {
+          // index.html
+          src: 'src/index.html',
+          dest: production ? PATHS.BUILD : PATHS.DEV,
+          transform: (contents) => {
+            let contentsString = contents.toString();
+
+            const replacement = {
+              __TITLE__: pkg.name,
+              __BASEPATH__: BASEPATH
+            };
+
+            let replaceRegexp;
+
+            for (var key in replacement) {
+              replaceRegexp = new RegExp(`\\{${key}\\}`, 'g');
+
+              if (Object.prototype.hasOwnProperty.call(replacement, key)) {
+                contentsString = contentsString.replace(
+                  replaceRegexp,
+                  replacement[key]
+                );
+              }
+            }
+
+            return contentsString;
+          }
+        }
+      ],
+      verbose: true
+    }),
+
+    replace({
+      __BASEPATH__: BASEPATH
     }),
 
     // If you have external dependencies installed from
@@ -41,22 +99,6 @@ export default {
     }),
     commonjs(),
     json(),
-
-    // In dev mode, call `npm run start` once
-    // the bundle has been generated
-    !production &&
-      serve({
-        contentBase: 'public',
-        historyApiFallback: true
-      }),
-
-    // Watch the `public` directory and refresh the
-    // browser on changes when not in production
-    !production && livereload('public'),
-
-    // If we're building for production (npm run build
-    // instead of npm run dev), minify
-    production && terser(),
 
     // Babel used to provide legacy (IE 11) support
     babel({
@@ -80,7 +122,28 @@ export default {
           }
         ]
       ]
-    })
+    }),
+
+    // In dev mode, call `npm run start` once
+    // the bundle has been generated
+    !production &&
+      serve({
+        contentBase: '_site/development',
+
+        // Automaticly start your default browser
+        // with serve url; http://localhost:10001<BASEPATH>
+        open: true,
+        openPage: BASEPATH,
+        historyApiFallback: true
+      }),
+
+    // Watch the `public` directory and refresh the
+    // browser on changes when not in production
+    !production && livereload(PATHS.DEV),
+
+    // If we're building for production (npm run build
+    // instead of npm run dev), minify
+    production && terser()
   ],
   watch: {
     clearScreen: false
