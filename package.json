@@ -6,7 +6,7 @@
         "url": "git://github.com/w3c/wcag-em-report-tool.git"
     },
     "scripts": {
-        "build": "rollup -c",
+        "build": "rollup -c --environment BASEPATH:\"/wcag-em-report-tool/svelte-preview/\"",
         "dev": "rollup -c -w",
         "start": "sirv public"
     },
