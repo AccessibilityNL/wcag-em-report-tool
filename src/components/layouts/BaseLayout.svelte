@@ -1,6 +1,6 @@
 <!-- @Layout:Base -->
 <div id="controls" class="default-grid">
-  <LanguageSelect />
+  <LanguageSelect locales={appData.locales} />
 </div>
 
 <div id="site-header" class="default-grid with-gap">
@@ -9,17 +9,29 @@
 
 <NavigationBar />
 
-<div class="default-grid">
+<div class="BaseLayout default-grid">
   <slot />
+
   <Pager
     label="step"
     context={routes}
   />
+
+  <Panel />
 </div>
 <!-- /@Layout -->
 
+<style>
+  .BaseLayout {
+    padding-top: 3em;
+  }
+</style>
+
 <script>
+  import appData from '../../data/app.js';
+
   import Header from '../Header.svelte';
+  import Panel from '../Panel.svelte';
   import LanguageSelect from '../i18n/LanguageSelect.svelte';
   import NavigationBar from '../NavigationBar.svelte';
   import Pager from '../Pager.svelte';
