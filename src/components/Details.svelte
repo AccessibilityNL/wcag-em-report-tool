@@ -1,0 +1,102 @@
+<!--
+ * @component
+ * Details
+ * @property label <String|@html>
+ * @slot Detail contents
+ * -->
+<details class="Details" open={open}>
+  <summary class="Details__label">
+    {@html label}
+  </summary>
+
+  <div class="Details__body">
+    <slot />
+  </div>
+</details>
+
+<style>
+  .Details {
+    padding: 0;
+  }
+
+  .Details__label {
+    display: flex;
+    align-items: flex-start;
+    align-items: baseline;
+    justify-content: flex-start;
+    padding: 0;
+    font-size: 1em;
+    line-height: 1.5;
+    list-style: none;
+    cursor: pointer;
+  }
+
+  :global(.Details__label::-webkit-details-marker) {
+    display: none;
+  }
+
+  :global(.Details__label > :first-child::before) {
+    content: none !important;
+  }
+
+  .Details__label::before {
+    flex-grow: 0;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    content: "";
+    margin-right: 0.5em;
+    border: 2px solid currentColor;
+    border-radius: 3px;
+    padding: 0.125em;
+    width: 1em;
+    height: 1em;
+    color: inherit;
+    color: var(--wai-green);
+    background-color: inherit;
+    font-weight: bold;
+    line-height: 1em;
+  }
+
+  .Details__label:focus::before,
+  .Details__label:hover::before {
+    color: white;
+    background-color: #333;
+    background-color: var(--w3c-blue);
+    border-color: #333;
+    border-color: var(--w3c-blue);
+  }
+
+  .Details[open] > .Details__label::before {
+    content: "–";
+  }
+
+  .Details:not([open]) > .Details__label::before {
+    content: "+";
+  }
+
+  /* Take control of child spacing */
+  :global(.Details__label > *) {
+    margin: 0;
+    padding: 0;
+  }
+
+  .Details__body {
+    margin-top: 1em;
+    padding-left: 2em;
+  }
+
+  :global(.Details__body > *:not(:last-child)) {
+    margin: 0 0 1em;
+  }
+
+  :global(.Details__body > *:last-child) {
+    margin: 0;
+  }
+</style>
+
+<script>
+  export let label = 'label';
+  export let open = false;
+</script>

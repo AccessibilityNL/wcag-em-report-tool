@@ -8,22 +8,18 @@
   </p>
   <p>{$translate('start.INTRO_2')}</p>
 
-  <details>
-    <summary>
-      <h2>{$translate('start.USAGE_HD')}</h2>
-    </summary>
+  <Details
+    label="<h2>{$translate('start.USAGE_HD')}</h2>"
+  >
     <p class="info"><strong>Editor's note</strong>: Requires a rewrite.</p>
     <ul>
       <li>{$translate('start.USAGE_LI1')}</li>
       <li>{$translate('start.USAGE_LI2')}</li>
       <li>{$translate('start.USAGE_LI3')}</li>
     </ul>
-  </details>
+  </Details>
 
-  <details>
-    <summary>
-      <h2>{$translate('start.TIPS_HD')}</h2>
-    </summary>
+  <Details label="<h2>{$translate('start.TIPS_HD')}</h2>">
     <p class="info"><strong>Editor's note</strong>: Requires a rewrite.</p>
     <ol>
       <li>{$translate('start.TIPS_LI1')}</li>
@@ -31,14 +27,27 @@
       <li>{$translate('start.TIPS_LI3')}</li>
       <li>{$translate('start.TIPS_LI4')}</li>
     </ol>
-  </details>
+  </Details>
 </Page>
+
+<Panel title="Start&shy;menu">
+  <button
+    type="button"
+    class="button-primary"
+  ><span>Start a <strong>new</strong> evaluation</span></button>
+  <button
+    type="button"
+    class="button-secondary"
+  ><span><strong>Open</strong> a saved evaluation</span></button>
+</Panel>
 <!-- /@Page -->
 
 <script>
   import { t as translate } from 'svelte-i18n';
 
+  import Details from '../Details.svelte';
   import Page from '../Page.svelte';
+  import Panel from '../Panel.svelte';
 
   // @todo: Add these links the locales
   // (They might be used on another page)
