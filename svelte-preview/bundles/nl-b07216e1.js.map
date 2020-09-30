@@ -1,1 +1,0 @@
-{"version":3,"file":"nl-b07216e1.js","sources":["../../../../../src/data/i18n/nl.js"],"sourcesContent":["import startRoute from '../../locales/nl/routes/index.json';\n\nexport default {\n  start: startRoute\n};\n"],"names":["start"],"mappings":"MAEe,CACbA"}
