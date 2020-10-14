@@ -1,4 +1,4 @@
-import { register, init, getLocaleFromPathname } from 'svelte-i18n';
+import { register, init } from 'svelte-i18n';
 
 import app from './app.js';
 

@@ -1,18 +1,30 @@
-<fieldset id="{id}" class="CheckboxGroup field">
+<fieldset id="{id}" class="MultipleChoice field">
   <legend>{label}</legend>
 
   <ol>
     {#each options as option, index (option)}
       <li>
-        <input
-          id="{`${id}_${index}`}"
-          type="checkbox"
-          value="{option.value || option.title || option}"
-          checked="{option.checked}"
-          name="{label}"
-          bind:group={value}
-          on:change
-        />
+        {#if type === CHECKBOX}
+          <input
+            id="{`${id}_${index}`}"
+            type="checkbox"
+            value="{option.value || option.title || option}"
+            checked="{option.checked}"
+            name="{label}"
+            bind:group="{value}"
+            on:change
+          />
+        {:else if type === RADIO}
+          <input
+            id="{`${id}_${index}`}"
+            type="radio"
+            value="{option.value || option.title || option}"
+            checked="{option.checked}"
+            name="{label}"
+            bind:group="{value}"
+            on:change
+          />
+        {/if}
         <label for="{`${id}_${index}`}">{option.title || option}</label>
       </li>
     {/each}
@@ -37,12 +49,17 @@
     outline: 2px solid currentColor;
     outline-offset: 2px;
   }
-
-  ol {
-    columns: 4 10em;
-    column-gap: 2em;
-  }
 </style>
+
+<script context="module">
+  const CHECKBOX = 'checkbox';
+  const RADIO = 'radio';
+  let value = [];
+
+  export function getValue() {
+    return value;
+  }
+</script>
 
 <script>
   import { createEventDispatcher } from 'svelte';
@@ -52,6 +69,7 @@
 
   export let id;
   export let label;
+  export let type = CHECKBOX;
   export let options = [];
   export let editable = false;
 
@@ -59,23 +77,15 @@
 
   function handleCheckboxAdd(event) {
     const newOption = {
-      title: event.detail.join(),
+      title: event.detail.join()
       // checked: true
     };
 
-    if (!options.some(option => option.title === newOption.title)) {
+    if (!options.some((option) => option.title === newOption.title)) {
       options = [...options, newOption];
       value = [...value, newOption.title];
 
       dispatch('change', value);
     }
-  }
-</script>
-
-<script context="module">
-  let value = [];
-
-  export function getValue() {
-    return value;
   }
 </script>
