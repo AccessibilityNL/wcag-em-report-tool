@@ -1,13 +1,14 @@
 <div class="Field field">
   {#if helptext}
-    <Details label={label && `<label for="${id}">${label}</label>`}>
+    <Details
+      label="{label && `<label for="${id}">${label}</label>`}"
+      icon={helptextIcon}
+    >
       {@html helptext}
     </Details>
-  {:else if label}
-    <label for="{id}">{label}</label>
-  {/if}
+  {:else if label}<label for="{id}">{label}</label>{/if}
 
-  <slot/>
+  <slot />
 </div>
 
 <style>
@@ -18,10 +19,6 @@
   :global(.Field > *:not(:last-child)) {
     margin-bottom: 0.5em;
   }
-
-  :global(.Field label) {
-    font-weight: bold;
-  }
 </style>
 
 <script>
@@ -30,4 +27,10 @@
   export let id;
   export let label;
   export let helptext;
+
+  const helptextIcon = {
+    collapse: 'Hide info',
+    expand: 'Show info',
+    position: 'right'
+  };
 </script>

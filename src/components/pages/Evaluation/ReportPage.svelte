@@ -1,19 +1,24 @@
 <Page title="{$translate('PAGES.REPORT.TITLE')}">
-  <p>{@html $translate('PAGES.REPORT.INTRO')}</p>
+  <p>
+    {@html $translate('PAGES.REPORT.INTRO')}
+  </p>
+
+  <aside class="box">
+    <header class="box-h">
+      <h2>{$translate('PAGES.REPORT.DOWNLOAD_REPORT')}</h2>
+    </header>
+    <div class="box-i">
+      <button><span>{$translate('PAGES.REPORT.BTN_SAVE_HTML')}</span></button>
+      <button><span>{$translate('PAGES.REPORT.BTN_SAVE_JSON')}</span></button>
+    </div>
+  </aside>
 
   <Report />
 </Page>
-
-<Panel title="Export evaluation">
-  <p>{$translate('PAGES.REPORT.DOWNLOAD_REPORT')}</p>
-  <button type="button" class="button-primary">{$translate('PAGES.REPORT.BTN_SAVE_HTML')}</button>
-  <button type="button" class="button-secondary">{$translate('PAGES.REPORT.BTN_SAVE_JSON')}</button>
-</Panel>
 
 <script>
   import { t as translate } from 'svelte-i18n';
 
   import Page from '../../Page.svelte';
-  import Panel from '../../Panel.svelte';
   import Report from '../../Report.svelte';
 </script>
