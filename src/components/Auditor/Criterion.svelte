@@ -1,17 +1,17 @@
 <!--
  * @component
- * Assertion
+ * Criterion
  * -->
-<div class="Assertion">
-  <header class="Assertion__Header">
-    <h3 class="Assertion__Header__heading">
-      {num}: {$translate(`WCAG.WCAG21.${num}.TITLE`)}
+<div class="Criterion">
+  <header class="Criterion__Header">
+    <h3 class="Criterion__Header__heading">
+      {num}: {$translate(`WCAG.WCAG21.SUCCESS_CRITERION.${num}.TITLE`)}
     </h3>
-    <span class="Assertion__Header__level">(Level {conformanceLevel})</span>
+    <span class="Criterion__Header__level">(Level {conformanceLevel})</span>
   </header>
 
   <Details label={`${$translate('PAGES.AUDIT.BTN_SHOW_TEXT')} <span class="visuallyhidden">for ${$translate(`WCAG.WCAG21.${num}.TITLE`)}</span>`}>
-    <div>{$translate(`WCAG.WCAG21.${num}.DESCRIPTION`)}</div>
+    <div>{$translate(`WCAG.WCAG21.SUCCESS_CRITERION.${num}.DESCRIPTION`)}</div>
 
     {#if details}
       <dl>
@@ -40,20 +40,25 @@
     {/if}
 
     <div class="">
-      <ResourceLink href="https://www.w3.org/WAI/WCAG21/Understanding/{$translate(`WCAG.WCAG21.${num}.ID`)}.html">{$translate('PAGES.AUDIT.UNDERSTAND')} {num}</ResourceLink>
-      <ResourceLink href="https://www.w3.org/WAI/WCAG21/quickref/#{$translate(`WCAG.WCAG21.${num}.ID`)}">{$translate('PAGES.AUDIT.HOW_TO')} {num}</ResourceLink>
+      <ResourceLink href="https://www.w3.org/WAI/WCAG21/Understanding/{$translate(`WCAG.WCAG21.SUCCESS_CRITERION.${num}.ID`)}.html">{$translate('PAGES.AUDIT.UNDERSTAND')} {num}</ResourceLink>
+      <ResourceLink href="https://www.w3.org/WAI/WCAG21/quickref/#{$translate(`WCAG.WCAG21.SUCCESS_CRITERION.${num}.ID`)}">{$translate('PAGES.AUDIT.HOW_TO')} {num}</ResourceLink>
     </div>
   </Details>
 
-  <fieldset class="Assertion__Result__container">
-    <legend class="Assertion__Subject">
+  <!--
+   * Results for scope
+   * assertion.subject === scope
+   * assertion.result
+   * -->
+  <fieldset class="Criterion__Result__container">
+    <legend class="Criterion__Subject">
       {$translate('PAGES.AUDIT.SAMPLE_FINDINGS')}
     </legend>
 
-    <div class="Assertion__Result">
-      <Select id="Result__Outcome" label="Outcome" options="{outcomeOptions}" />
+    <div class="Criterion__Result">
+      <Select id="{`${num}--result__outcome`}" label="{$translate('PAGES.AUDIT.LABEL_OUTCOME')}" options="{outcomeOptions}" bind:value="{scopeAssertion.result.outcome}" />
 
-      <Textarea id="Result__Description" label="Description" />
+      <Textarea id="{`${num}--result__description`}" label="{$translate('PAGES.AUDIT.ASSERTION_RESULT_DESCRIPTION_LABEL')}" bind:value="{scopeAssertion.result.description}" />
     </div>
   </fieldset>
 
@@ -64,59 +69,59 @@
 <!-- /component -->
 
 <style>
-  .Assertion {
+  .Criterion {
     background-color: var(--pure-white);
     border: 1px solid var(--line-grey);
     box-shadow: 1px 1px 4px -4px #000;
     padding: 1em;
   }
 
-  :global(.Assertion > *:not(:last-child)) {
+  :global(.Criterion > *:not(:last-child)) {
     margin-bottom: 1em;
   }
 
-  :global(.Assertion > *:last-child) {
+  :global(.Criterion > *:last-child) {
     margin-bottom: 0;
   }
 
-  .Assertion__Header {
+  .Criterion__Header {
     margin-bottom: 1em;
     font-size: 1em;
     line-height: 1.5em;
   }
 
-  .Assertion__Header > * {
+  .Criterion__Header > * {
     margin: 0;
     padding: 0;
     font-size: inherit;
     line-height: inherit;
   }
 
-  .Assertion__Header__heading {
+  .Criterion__Header__heading {
     font-size: 1.25em;
     font-weight: normal;
   }
-  .Assertion__Header__level {
+  .Criterion__Header__level {
     font-style: normal;
     vertical-align: middle;
     white-space: nowrap;
   }
 
-  .Assertion__Result__container {
+  .Criterion__Result__container {
     display: block;
     border: none;
   }
 
-  :global(.Assertion__Result__container > *:not(:last-child)) {
+  :global(.Criterion__Result__container > *:not(:last-child)) {
     margin-bottom: 1em;
   }
 
-  .Assertion__Subject {
+  .Criterion__Subject {
     padding: 0;
     font-size: 1em;
   }
 
-  .Assertion__Result {
+  .Criterion__Result {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -126,30 +131,30 @@
   }
 
   /* use :global for children as they are in different components */
-  :global(.Assertion__Result label::after) {
+  :global(.Criterion__Result label::after) {
     content: ':';
   }
 
-  :global(.Assertion__Result > *:not(:last-child)) {
+  :global(.Criterion__Result > *:not(:last-child)) {
     flex: 1;
     margin-bottom: 1em;
   }
 
-  :global(.Assertion__Result > :last-child) {
+  :global(.Criterion__Result > :last-child) {
     flex: 3;
   }
 
-  :global(.Assertion__Result textarea) {
+  :global(.Criterion__Result textarea) {
     width: 100%;
     font-family: 'Noto Sans Mono', monospace;
   }
 
   @media (min-width: 40rem) {
-    .Assertion__Result {
+    .Criterion__Result {
       flex-direction: row;
     }
 
-    :global(.Assertion__Result > *:not(:last-child)) {
+    :global(.Criterion__Result > *:not(:last-child)) {
       margin-bottom: 0;
       margin-right: 2em;
     }
@@ -157,26 +162,31 @@
 </style>
 
 <script>
+  import { getContext } from 'svelte';
   import { t as translate, dictionary, locale } from 'svelte-i18n';
 
   import Details from '../Details.svelte';
   import ResourceLink from '../ResourceLink.svelte';
 
-  import Select from './Select.svelte';
-  import Textarea from './Textarea.svelte';
+  import Select from '../formcomponents/Select.svelte';
+  import Textarea from '../formcomponents/Textarea.svelte';
 
   export let num;
   export let conformanceLevel;
 
+  const { auditStore } = getContext('app');
+
   // Dynamicly get the amount of details from the dictionairy
   let details = Object.keys($dictionary[`${$locale}`]).filter((key) => {
     return (
-      key.indexOf(`WCAG.WCAG21.${num}.DETAILS`) >= 0
+      key.indexOf(`WCAG.WCAG21.SUCCESS_CRITERION.${num}.DETAILS`) >= 0
       && key.indexOf('TITLE') >= 0
     );
   }).map(key => key.replace('.TITLE', ''));
   let notes;
 
+  $: assertions = $auditStore['ASSERTIONS'].filter((a) => a.test.num === num);
+  $: scopeAssertion = assertions.find((a) => a.subject.type.indexOf('WebSite') >= 0);
   $: outcomeOptions = [
     {
       title: $translate('UI.EARL.PASSED')
