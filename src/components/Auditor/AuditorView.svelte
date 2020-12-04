@@ -45,7 +45,7 @@
                *
                *
                * -->
-              <Criterion {...criterion} />
+              <Criterion test="{criterion}" />
             </div>
           {/each}
         </Details>
@@ -58,22 +58,21 @@
 
 <script>
   import { getContext } from 'svelte';
-  import { t as translate } from 'svelte-i18n';
 
   import Criterion from './Criterion.svelte';
   import Details from '../Details.svelte';
 
   export let criteria = [];
 
-  const { auditStore } = getContext('app');
+  const { auditStore, translate } = getContext('app');
 
-  // Can be moved to derived store
+  // Sets are unique values
   $: principles = new Set(criteria.map((a) => a.num.split('.')[0]));
   $: guidelines = new Set(
     criteria.map((a) => {
-      const splitted = a.num.split('.');
+      const splittedNum = a.num.split('.');
 
-      return `${splitted[0]}.${splitted[1]}`;
+      return `${splittedNum[0]}.${splittedNum[1]}`;
     })
   );
 </script>

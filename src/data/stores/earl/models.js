@@ -1,8 +1,19 @@
 // id lookup
 const _ids = {};
 
+const partsMixin = (SuperClass) => class PartsMixin extends SuperClass {
+  constructor(options = {}) {
+    super(options);
+
+    this.hasPart = options.hasPart || null;
+    this.isPartOf = options.isPartOf || null;
+  }
+};
+
+
 class Base {
-  constructor(options) {
+  constructor(options = {}) {
+
     const {
       ID,
       date,
@@ -10,9 +21,7 @@ class Base {
       description
     } = options;
 
-    this.name = this.constructor.name;
-
-    this.ID = ID || createID(this.name);
+    this.ID = ID ? ID : createID(this.constructor.name);
     this.date = date ? date : createDate();
     this.title = title || '';
     this.description = description || '';
@@ -21,8 +30,8 @@ class Base {
 
 
 
-export class TestSubject extends Base {
-  constructor(options) {
+export class TestSubject extends partsMixin(Base) {
+  constructor(options = {}) {
     super(options);
 
     const { type } = options;
@@ -40,7 +49,7 @@ export class TestSubject extends Base {
 }
 
 
-class TestCriterion extends Base {
+class TestCriterion extends partsMixin(Base) {
   constructor(options) {
     super(options);
 
@@ -55,6 +64,28 @@ export class TestRequirement extends TestCriterion {
     super(options);
 
     this.type = this.type.concat(['TestRequirement']);
+  }
+}
+
+
+export class TestResult extends Base {
+  constructor(options) {
+    super(options);
+
+    this.outcome = '';
+  }
+}
+
+
+export class Assertion extends Base {
+  constructor(options = {}) {
+    super(options);
+
+    this.assertedBy = null;
+    this.mode = 'manual';
+    this.result = options.result || null;
+    this.subject = options.subject || null;
+    this.test = options.test || null;
   }
 }
 

@@ -57,10 +57,14 @@
 
   <!--
    * Results for scope
-   * assertion.subject === scope
+   * assertion.subject === WebSite
    * assertion.result
    * -->
-  <EarlResult {...scopeAssertion} />
+  <EarlResult
+    label="{$translate('PAGES.AUDIT.SAMPLE_FINDINGS')}"
+    test="{test}"
+    subject="{scopeSubject}"
+  />
 
   <Details label="{`<h4>${$translate('PAGES.AUDIT.BTN_EXPAND_PAGES')}</h4>`}">
     <!--
@@ -73,8 +77,14 @@
      *
      * Then each assertion => <EarlResult {...assertion} />
    -->
-    {#each $allSamples as sample (`${num}-${sample.ID}`)}
-      <EarlResult subject="{sample}" />
+    {#each $allSamples as sample, index (`${num}-${sample.ID}`)}
+      {#if $auditSamples.indexOf(sample.ID) >= 0}
+        <EarlResult
+          label="{$translate('PAGES.AUDIT.RESULTS_FOR')}: {sample.title || sample.description || `Sample ${index + 1}`}"
+          test="{test}"
+          subject="{sample}"
+        />
+      {/if}
     {:else}
       <p>No sample(s) selected.</p>
     {/each}
@@ -116,24 +126,23 @@
 
 <script>
   import { getContext } from 'svelte';
-  import { t as translate, dictionary, locale } from 'svelte-i18n';
+  import { dictionary, locale } from 'svelte-i18n';
 
+  import { auditSamples } from '../../data/stores/auditStore.js';
   import { allSamples } from '../../data/stores/sampleStore.js';
+  import { subject } from '../../data/stores/earl/subjectStore.js';
 
   import Details from '../Details.svelte';
   import EarlResult from '../EarlResult.svelte';
   import ResourceLink from '../ResourceLink.svelte';
 
-  export let num;
-  export let conformanceLevel;
+  export let test;
 
-  // Should receive assertions specific
-  // to the test.id (wich is a wcag.sc.num)
-  // export let assertions;
+  const { conformanceLevel, num } = test;
 
-  const { auditStore } = getContext('app');
+  const { translate } = getContext('app');
 
-  // Dynamicly get the amount of details from the dictionairy
+  // Dynamicly get the amount of WCAG criterion details from the dictionairy
   let details = Object.keys($dictionary[`${$locale}`])
     .filter((key) => {
       return (
@@ -144,18 +153,5 @@
     .map((key) => key.replace('.TITLE', ''));
   let notes;
 
-  // We can drop this line
-  $: assertions = $auditStore['ASSERTIONS'].filter((a) => a.test.num === num);
-
-  // Find the assertion with subject
-  // type WebSite === scope
-  $: scopeAssertion = assertions.find(
-    (a) => a.subject.type.indexOf('WebSite') >= 0
-  );
-
-  // Find the assertion with subject
-  // type not WebSite (or WebPage/sample instead)
-  $: sampleAssertions = assertions.filter(
-    (a) => a.subject.type.indexOf('WebSite') === -1
-  );
+  let scopeSubject = $subject(1);
 </script>
