@@ -1,44 +1,65 @@
 // id lookup
 const _ids = {};
 
-const partsMixin = (SuperClass) => class PartsMixin extends SuperClass {
-  constructor(options = {}) {
-    super(options);
+const partsMixin = (SuperClass) =>
+  class PartsMixin extends SuperClass {
+    constructor(options = {}) {
+      super(options);
 
-    this.hasPart = options.hasPart || null;
-    this.isPartOf = options.isPartOf || null;
-  }
-};
-
+      Object.assign(this['@context'], {
+        hasPart: 'dcterms:hasPart',
+        isPartOf: 'dcterms:isPartOf'
+      });
+      this.hasPart = options.hasPart;
+      this.isPartOf = options.isPartOf;
+    }
+  };
 
 class Base {
   constructor(options = {}) {
+    const { ID, date, title, description } = options;
 
-    const {
-      ID,
-      date,
-      title,
-      description
-    } = options;
+    this['@context'] = {
+      earl: 'http://www.w3.org/ns/earl#',
+      dcterms: 'http://purl.org/dc/terms/',
+      W3CDTF: 'http://www.w3.org/TR/NOTE-datetime',
+      title: 'dcterms:title',
+      date: {
+        '@id': 'dcterms:date',
+        '@type': 'W3CDTF'
+      },
+      description: 'dcterms:description',
+      type: '@type'
+    };
+
+    if (options['@id']) {
+      this['@id'] = options['@id'];
+    }
 
     this.ID = ID ? ID : createID(this.constructor.name);
     this.date = date ? date : createDate();
-    this.title = title || '';
-    this.description = description || '';
+    this.title = title;
+    this.description = description;
+  }
+
+  update() {
+    this.date = createDate();
   }
 }
-
-
 
 export class TestSubject extends partsMixin(Base) {
   constructor(options = {}) {
     super(options);
 
     const { type } = options;
-    const ALLOWED_TYPES = [
-      'WebSite',
-      'WebPage'
-    ];
+    const ALLOWED_TYPES = ['WebSite', 'WebPage'];
+
+    Object.assign(this['@context'], {
+      schema: 'http://schema.org/',
+      WebSite: 'schema:WebSite',
+      WebPage: 'schema:WebPage',
+      TestSubject: 'earl:TestSubject'
+    });
 
     this.type = ['TestSubject'];
 
@@ -48,53 +69,163 @@ export class TestSubject extends partsMixin(Base) {
   }
 }
 
-
 class TestCriterion extends partsMixin(Base) {
   constructor(options) {
     super(options);
+
+    Object.assign(this['@context'], {
+      TestCriterion: 'earl:TestCriterion'
+    });
 
     this.type = ['TestCriterion'];
   }
 }
 
-
-
 export class TestRequirement extends TestCriterion {
   constructor(options) {
     super(options);
 
-    this.type = this.type.concat(['TestRequirement']);
+    Object.assign(this['@context'], {
+      TestRequirement: 'earl:TestRequirement'
+    });
+
+    this.type.push('TestRequirement');
   }
 }
 
+class OutcomeValue extends Base {
+  constructor(options) {
+    super(options);
+
+    const { type } = options;
+    const ALLOWED_TYPES = [
+      'Pass',
+      'Fail',
+      'CannotTell',
+      'NotApplicable',
+      'NotTested'
+    ];
+
+    Object.assign(this['@context'], {
+      OutcomeValue: 'earl:OutcomeValue',
+      Pass: 'earl:Pass',
+      Fail: 'earl:Fail',
+      CannotTell: 'earl:CannotTell',
+      NotApplicable: 'earl:NotApplicable',
+      NotTested: 'earl:NotTested'
+    });
+
+    this.type = ['OutcomeValue'];
+
+    if (ALLOWED_TYPES.indexOf(type) >= 0) {
+      this.type.push(type);
+    }
+
+    delete this.date;
+  }
+
+  update() {}
+}
+
+const PASSED = new OutcomeValue({
+  '@id': 'earl:passed',
+  type: 'Pass'
+});
+
+const FAILED = new OutcomeValue({
+  '@id': 'earl:failed',
+  type: 'Fail'
+});
+
+const CANT_TELL = new OutcomeValue({
+  '@id': 'earl:cantTell',
+  type: 'CannotTell'
+});
+
+const INAPPLICABLE = new OutcomeValue({
+  '@id': 'earl:inapplicable',
+  type: 'NotApplicable'
+});
+
+const UNTESTED = new OutcomeValue({
+  '@id': 'earl:untested',
+  type: 'NotTested'
+});
+
+export const OUTCOME = {
+  PASSED,
+  FAILED,
+  CANT_TELL,
+  INAPPLICABLE,
+  UNTESTED
+};
 
 export class TestResult extends Base {
   constructor(options) {
     super(options);
 
-    this.outcome = '';
+    Object.assign(this['@context'], {
+      TestResult: 'earl:TestResult',
+      OutcomeValue: 'earl:OutcomeValue',
+      outcome: {
+        '@id': 'earl:outcome',
+        '@type': 'earl:OutcomeValue'
+      }
+    });
+
+    this.type = ['TestResult'];
+    this.outcome = UNTESTED;
   }
 }
-
 
 export class Assertion extends Base {
   constructor(options = {}) {
     super(options);
 
+    Object.assign(this['@context'], {
+      Assertion: 'earl:Assertion',
+      assertedBy: {
+        '@id': 'earl:assertedBy',
+        '@type': 'earl:Assertor'
+      },
+      mode: {
+        '@id': 'earl:mode',
+        '@type': 'earl:TestMode'
+      },
+      result: {
+        '@id': 'earl:result',
+        '@type': 'earl:TestResult'
+      },
+      subject: {
+        '@id': 'earl:subject',
+        '@type': 'earl:TestSubject'
+      },
+      test: {
+        '@id': 'earl:test',
+        '@type': 'earl:TestCriterion'
+      }
+    });
+
+    this.type = 'Assertion';
     this.assertedBy = null;
-    this.mode = 'manual';
-    this.result = options.result || null;
-    this.subject = options.subject || null;
-    this.test = options.test || null;
+    this.mode = 'earl:manual';
+    this.result = options.result;
+    this.subject = options.subject;
+    this.test = options.test;
   }
 }
 
 function createDate(date = new Date()) {
-  const Y = date.getFullYear();
-  const M = date.getMonth();
-  const D = date.getDate();
+  let dateObject;
 
-  return `${Y}-${M}-${D}`;
+  try {
+    dateObject = new Date(date);
+  } catch (e) {
+    console.warn(`[createDate]: ${e.message}`);
+    return date;
+  }
+
+  return dateObject.toISOString();
 }
 
 function createID(className) {
@@ -105,9 +236,7 @@ function createID(className) {
     currentIds = _ids[className] = [];
   }
 
-  newId = currentIds.length > 0
-    ? Math.max.apply(null, currentIds) + 1
-    : 1;
+  newId = currentIds.length > 0 ? Math.max.apply(null, currentIds) + 1 : 1;
 
   currentIds.push(newId);
 
