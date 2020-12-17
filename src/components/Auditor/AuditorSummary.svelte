@@ -51,7 +51,7 @@
             {#each scopeAssertion(criterion) as assertion}
               <dl>
                 <dt>Outcome</dt>
-                <dd>{assertion.result.outcome}</dd>
+                <dd>{assertion.result.outcome.title}</dd>
                 <dt>Observation</dt>
                 <dd>{assertion.result.description}</dd>
               </dl>
@@ -83,8 +83,6 @@
   import { getContext } from 'svelte';
 
   import assertions from '../../data/stores/earl/assertionStore.js';
-
-  import Details from '../Details.svelte';
 
   export let criteria = [];
 

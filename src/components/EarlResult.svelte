@@ -72,7 +72,6 @@
 
   import { getContext } from 'svelte';
   import { assertion } from '../data/stores/earl/assertionStore.js';
-  import { OUTCOME } from '../data/stores/earl/models.js';
 
   import Flex from './Flex.svelte';
   import Select from './formcomponents/Select.svelte';
@@ -86,6 +85,7 @@
   export let test = {};
 
   const { translate } = getContext('app');
+  const { outcomeValues } = getContext('Evaluation');
 
   // Create or get an Assertion
   $: _assertion = $assertion({
@@ -93,18 +93,14 @@
     test
   });
 
-  // Grab this from earl data maybe?
-  // Keeping the values consistent
-  $: outcomeOptions = Object.keys(OUTCOME).map((outcomeKey, index) => {
-    const title = $translate(`UI.EARL.${outcomeKey}`);
-    const value = OUTCOME[outcomeKey];
-
-    value.title = title;
+  $: outcomeOptions = outcomeValues.map((outcomeValue, index) => {
+    const title = outcomeValue.title;
+    const value = outcomeValue;
 
     return {
       title,
       value,
-      selected: index === Object.keys(OUTCOME).length - 1
+      selected: index === outcomeValues.length - 1
     };
   });
 
