@@ -17,7 +17,7 @@ const partsMixin = (SuperClass) =>
 
 class Base {
   constructor(options = {}) {
-    const { ID, date, title, description } = options;
+    const { ID, date, title, description, summary } = options;
 
     this['@context'] = {
       earl: 'http://www.w3.org/ns/earl#',
@@ -29,17 +29,19 @@ class Base {
         '@type': 'W3CDTF'
       },
       description: 'dcterms:description',
+      id: '@id',
       type: '@type'
     };
 
-    if (options['@id']) {
-      this['@id'] = options['@id'];
+    if (options.id) {
+      this.id = options.id;
     }
 
     this.ID = ID ? ID : createID(this.constructor.name);
     this.date = date ? date : createDate();
     this.title = title;
     this.description = description;
+    this.summary = summary;
   }
 
   update() {
@@ -51,7 +53,7 @@ export class TestSubject extends partsMixin(Base) {
   constructor(options = {}) {
     super(options);
 
-    const { type } = options;
+    let { type } = options;
     const ALLOWED_TYPES = ['WebSite', 'WebPage'];
 
     Object.assign(this['@context'], {
@@ -61,11 +63,28 @@ export class TestSubject extends partsMixin(Base) {
       TestSubject: 'earl:TestSubject'
     });
 
+    if (!this.id) {
+      this.id = `_:subject_${this.ID}`;
+    }
     this.type = ['TestSubject'];
 
-    if (ALLOWED_TYPES.indexOf(type) >= 0) {
-      this.type.push(type);
+    if (!Array.isArray(type)) {
+      type = [type];
     }
+
+    if (!this.title) {
+      this.title = '';
+    }
+
+    if (!this.description) {
+      this.description = '';
+    }
+
+    type.forEach((t) => {
+      if (ALLOWED_TYPES.indexOf(t) >= 0) {
+        this.type.push(t);
+      }
+    });
   }
 }
 
@@ -128,31 +147,31 @@ export class OutcomeValue extends Base {
 }
 
 const PASSED = new OutcomeValue({
-  '@id': 'earl:passed',
+  id: 'earl:passed',
   type: 'Pass'
 });
 Object.freeze(PASSED);
 
 const FAILED = new OutcomeValue({
-  '@id': 'earl:failed',
+  id: 'earl:failed',
   type: 'Fail'
 });
 Object.freeze(FAILED);
 
 const CANT_TELL = new OutcomeValue({
-  '@id': 'earl:cantTell',
+  id: 'earl:cantTell',
   type: 'CannotTell'
 });
 Object.freeze(CANT_TELL);
 
 const INAPPLICABLE = new OutcomeValue({
-  '@id': 'earl:inapplicable',
+  id: 'earl:inapplicable',
   type: 'NotApplicable'
 });
 Object.freeze(INAPPLICABLE);
 
 const UNTESTED = new OutcomeValue({
-  '@id': 'earl:untested',
+  id: 'earl:untested',
   type: 'NotTested'
 });
 Object.freeze(UNTESTED);
@@ -180,13 +199,23 @@ export class TestResult extends Base {
     });
 
     this.type = ['TestResult'];
-    this.outcome = {...UNTESTED};
+    this.outcome = { ...UNTESTED };
   }
 }
 
 export class Assertion extends Base {
   constructor(options = {}) {
     super(options);
+
+    const REQUIRED_OPTIONS = ['subject', 'test'];
+
+    if (REQUIRED_OPTIONS.some((option) => options[option] === undefined)) {
+      throw Error(
+        `[Assertion]: Expected required options: ${REQUIRED_OPTIONS.join(
+          ', '
+        )}, but only got ${Object.keys(options).join(', ')}`
+      );
+    }
 
     Object.assign(this['@context'], {
       Assertion: 'earl:Assertion',
@@ -213,9 +242,9 @@ export class Assertion extends Base {
     });
 
     this.type = 'Assertion';
-    this.assertedBy = null;
+    this.assertedBy = options.assertedBy;
     this.mode = 'earl:manual';
-    this.result = options.result;
+    this.result = options.result || new TestResult();
     this.subject = options.subject;
     this.test = options.test;
   }

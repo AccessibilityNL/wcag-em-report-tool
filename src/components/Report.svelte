@@ -83,14 +83,14 @@
 
 <script>
   import { getContext } from 'svelte';
-  import { t as translate, date } from 'svelte-i18n';
+  import { date } from 'svelte-i18n';
   import tests from '../data/stores/earl/testStore.js';
 
   import AuditorSummary from './Auditor/AuditorSummary.svelte';
 
   let exportableReport;
 
-  const { sampleStore, scopeStore, summaryStore } = getContext('app');
+  const { sampleStore, scopeStore, summaryStore, translate } = getContext('app');
 
   $: scope = {
     siteName: $scopeStore['SITE_NAME'],
@@ -104,7 +104,7 @@
   $: report = {
     commissioner: $summaryStore['EVALUATION_COMMISSIONER'],
     creator: $summaryStore['EVALUATION_CREATOR'],
-    date: $date(new Date($summaryStore['EVALUATION_DATE']), { format: 'full' }),
+    date: $summaryStore['EVALUATION_DATE'],
     samples: [
       ...$sampleStore['STRUCTURED_SAMPLE'],
       ...$sampleStore['RANDOM_SAMPLE']
