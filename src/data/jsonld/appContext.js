@@ -8,6 +8,8 @@ const deprecatedContext = {
   DfnReliedUponTechnologyWcag21: 'WCAG21:dfn-relied-upon',
   DfnSetOfWebpagesWcag21: 'WCAG21:dfn-set-of-web-pages',
   DfnWebpageWcag21: 'WCAG21:dfn-web-page-s',
+
+  testcase: 'wcagem:testcase'
 };
 
 const exportContext = {
@@ -103,7 +105,11 @@ const exportContext = {
 export const importContext = {
   // Add deprecatedContext to support previous versions of this tool
   ...deprecatedContext,
-  ...exportContext
+  ...exportContext,
+
+  // Set simple IRI to prevent left hand expansion
+  // to dcterms:date
+  date: 'dcterms:date'
 };
 
 export default exportContext;
