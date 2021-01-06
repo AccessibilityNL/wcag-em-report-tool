@@ -1,7 +1,8 @@
 // id lookup
+// May be better to move this to collectionStore
 const _ids = {};
 
-const partsMixin = (SuperClass) =>
+export const partsMixin = (SuperClass) =>
   class PartsMixin extends SuperClass {
     constructor(options = {}) {
       super(options);
@@ -15,19 +16,15 @@ const partsMixin = (SuperClass) =>
     }
   };
 
-class Base {
+export class Base {
   constructor(options = {}) {
     const { ID, date, title, description, summary } = options;
 
     this['@context'] = {
       earl: 'http://www.w3.org/ns/earl#',
       dcterms: 'http://purl.org/dc/terms/',
-      W3CDTF: 'http://www.w3.org/TR/NOTE-datetime',
       title: 'dcterms:title',
-      date: {
-        '@id': 'dcterms:date',
-        '@type': 'W3CDTF'
-      },
+      date: 'dcterms:date',
       description: 'dcterms:description',
       id: '@id',
       type: '@type'
@@ -46,45 +43,6 @@ class Base {
 
   update() {
     this.date = createDate();
-  }
-}
-
-export class TestSubject extends partsMixin(Base) {
-  constructor(options = {}) {
-    super(options);
-
-    let { type } = options;
-    const ALLOWED_TYPES = ['WebSite', 'WebPage'];
-
-    Object.assign(this['@context'], {
-      schema: 'http://schema.org/',
-      WebSite: 'schema:WebSite',
-      WebPage: 'schema:WebPage',
-      TestSubject: 'earl:TestSubject'
-    });
-
-    if (!this.id) {
-      this.id = `_:subject_${this.ID}`;
-    }
-    this.type = ['TestSubject'];
-
-    if (!Array.isArray(type)) {
-      type = [type];
-    }
-
-    if (!this.title) {
-      this.title = '';
-    }
-
-    if (!this.description) {
-      this.description = '';
-    }
-
-    type.forEach((t) => {
-      if (ALLOWED_TYPES.indexOf(t) >= 0) {
-        this.type.push(t);
-      }
-    });
   }
 }
 
@@ -254,13 +212,13 @@ function createDate(date = new Date()) {
   let dateObject;
 
   try {
-    dateObject = new Date(date);
+    dateObject = (new Date(date)).toISOString();
   } catch (e) {
     console.warn(`[createDate]: ${e.message}`);
-    return date;
+    dateObject = date;
   }
 
-  return dateObject.toISOString();
+  return dateObject;
 }
 
 function createID(className) {

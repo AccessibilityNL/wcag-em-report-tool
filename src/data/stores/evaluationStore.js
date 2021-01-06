@@ -8,14 +8,17 @@ import webTechnologies from '../webtechnologies.json';
 
 // Import related stores and combine
 import { TestResult } from './earl/models.js';
-import scopeStore from './scopeStore.js';
+import scopeStore, { initialScopeStore } from './scopeStore.js';
 import exploreStore, { initialExploreStore } from './exploreStore.js';
 import sampleStore, { initialSampleStore } from './sampleStore.js';
-import summaryStore from './summaryStore.js';
+import summaryStore, { initialSummaryStore } from './summaryStore.js';
 
 import assertions from './earl/assertionStore.js';
 import { outcomeValueStore as outcomeValues } from './earl/resultStore.js';
-import subjects, { initialSubjectStore } from './earl/subjectStore.js';
+import subjects, {
+  initialSubjectStore,
+  TestSubjectTypes
+} from './earl/subjectStore/';
 import tests from './earl/testStore.js';
 
 function downloadFile({ contents, name, type }) {
@@ -130,10 +133,27 @@ class EvaluationModel {
   }
 
   reset() {
+    scopeStore.update(() => {
+      return { ...initialScopeStore };
+    });
+
+    sampleStore.update(() => {
+      return { ...initialSampleStore };
+    });
+
+    exploreStore.update(() => {
+      return { ...initialExploreStore };
+    });
+
     assertions.update(() => []);
-    sampleStore.update(() => initialSampleStore);
-    exploreStore.update(() => initialExploreStore);
-    subjects.update(() => initialSubjectStore);
+
+    subjects.update(() => {
+      return [...initialSubjectStore];
+    });
+
+    summaryStore.update(() => {
+      return { ...initialSummaryStore };
+    });
   }
 
   async open(openedEvaluation) {
@@ -321,9 +341,13 @@ class EvaluationModel {
 
           return {
             STRUCTURED_SAMPLE: structuredSample.map((sample) => {
+              sample.type = 'Webpage';
+
               return subjects.create(sample);
             }),
             RANDOM_SAMPLE: randomSample.map((sample) => {
+              sample.type = 'Webpage';
+
               return subjects.create(sample);
             })
           };
@@ -331,7 +355,7 @@ class EvaluationModel {
 
         summaryStore.update((value) => {
           return Object.assign(value, {
-            EVALUATION_TITLE: reportFindings.title || '',
+            EVALUATION_TITLE: reportFindings.title || framedEvaluation.title || '',
             EVALUATION_COMMISSIONER:
               reportFindings.commissioner ||
               framedEvaluation.commissioner ||
@@ -495,8 +519,8 @@ export default derived(
 
     Object.assign(_evaluation.defineScope, {
       // First subject === scope / website
-      scope: $subjects.find((s) => {
-        return s.type.indexOf('WebSite') >= 0;
+      scope: $subjects.find(($subject) => {
+        return $subject.type.indexOf(TestSubjectTypes.WEBSITE) >= 0;
       }),
       wcagVersion: WCAG_VERSION,
       conformanceTarget: CONFORMANCE_TARGET
