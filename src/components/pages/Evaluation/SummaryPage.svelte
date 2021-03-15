@@ -2,6 +2,7 @@
   <p>
     {@html TRANSLATED.INTRODUCTION}
   </p>
+  <ResourceLink href="https://www.w3.org/TR/WCAG-EM/#step5">{TRANSLATED.RESOURCE_LINK_NAME}</ResourceLink>
 
   <form action="" novalidate>
     <Input
@@ -47,28 +48,28 @@
     />
   </form>
 
-  <Details
-    label="{`<h2>${TRANSLATED.AUDIT_RESULTS_HEADING}</h2>`}"
-  >
+  <details>
+    <summary><h2>{TRANSLATED.AUDIT_RESULTS_HEADING}</h2></summary>
     <AuditorSummary criteria="{$tests}" />
-  </Details>
+  </details>
 </Page>
 
 <script>
   import { getContext } from 'svelte';
-  import tests from '../../../data/stores/earl/testStore.js';
+  import tests from '@app/stores/earl/testStore/index.js';
 
-  import Details from '../../Details.svelte';
-  import Page from '../../Page.svelte';
+  import Page from '@app/components/ui/Page.svelte';
 
-  import AuditorSummary from '../../Auditor/AuditorSummary.svelte';
-  import Input from '../../formcomponents/Input.svelte';
-  import Textarea from '../../formcomponents/Textarea.svelte';
+  import AuditorSummary from '@app/components/ui/Auditor/AuditorSummary.svelte';
+  import Input from '@app/components/form/Input.svelte';
+  import ResourceLink from '@app/components/ui/ResourceLink.svelte';
+  import Textarea from '@app/components/form/Textarea.svelte';
 
   const { summaryStore, translate } = getContext('app');
   $: TRANSLATED = {
     PAGE_TITLE: $translate('PAGES.SUMMARY.TITLE'),
     INTRODUCTION: $translate('PAGES.SUMMARY.INTRO'),
+    RESOURCE_LINK_NAME: $translate('PAGES.SUMMARY.RESOURCE_LINK_NAME'),
     REPORT_TITLE_LABEL: $translate('PAGES.SUMMARY.LABEL_TITLE'),
     REPORT_TITLE_HELPTEXT: $translate('PAGES.SUMMARY.INF_TITLE'),
     COMMISSIONER_LABEL: $translate('PAGES.SUMMARY.LABEL_COMMISSIONER'),

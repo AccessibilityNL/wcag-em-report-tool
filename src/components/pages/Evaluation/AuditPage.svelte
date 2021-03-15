@@ -1,20 +1,26 @@
 <Page title="{TRANSLATED.PAGE_TITLE}">
   <p>{@html TRANSLATED.INTRODUCTION}</p>
-
+  <ResourceLink href="https://www.w3.org/TR/WCAG-EM/#step4">{TRANSLATED.RESOURCE_LINK_NAME}</ResourceLink>
+  <p>{@html TRANSLATED.INTRODUCTION_NOTE}</p>
+  <AuditorImport />
   <Auditor />
 </Page>
 
 <script>
   import { getContext } from 'svelte';
 
-  import Auditor from '../../Auditor/Auditor.svelte';
-  import Page from '../../Page.svelte';
+  import Auditor from '@app/components/ui/Auditor/Auditor.svelte';
+  import AuditorImport from '@app/components/ui/Auditor/AuditorImport.svelte';
+  import ResourceLink from '@app/components/ui/ResourceLink.svelte';
+  import Page from '@app/components/ui/Page.svelte';
 
   const { translate } = getContext('app');
 
   $: TRANSLATED = {
     PAGE_TITLE: $translate('PAGES.AUDIT.TITLE'),
-    INTRODUCTION: $translate('PAGES.AUDIT.INTRO')
+    INTRODUCTION: $translate('PAGES.AUDIT.INTRO'),
+    INTRODUCTION_NOTE: $translate('PAGES.AUDIT.INTRO_NOTE'),
+    RESOURCE_LINK_NAME: $translate('PAGES.AUDIT.RESOURCE_LINK_NAME')
   };
 
 </script>

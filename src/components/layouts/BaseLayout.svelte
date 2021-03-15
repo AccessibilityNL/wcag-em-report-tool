@@ -2,7 +2,7 @@
 <div class="Controls">
   <Grid>
     <GridItem area="full">
-      <LanguageSelect locales="{appData.locales}" />
+      <LanguageSelect locales="{locales}" />
     </GridItem>
   </Grid>
 </div>
@@ -10,7 +10,21 @@
 <div id="site-header" style="padding: 0;">
   <Grid>
     <GridItem area="full">
-      <Header />
+      <div class="tool-header">
+        <div class="tool-header-name">
+          WCAG-EM R<span class="display-phablet">eport </span>T<span class="display-phablet">ool</span>
+        </div>
+        <div class="tool-header-logo">
+          <a href="http://w3.org/"><img
+              alt="W3C"
+              src="images/w3c.svg"
+            /></a>
+          <a href="http://w3.org/WAI/"><img
+              alt="Web Accessibility Initiative"
+              src="images/wai.svg"
+            /></a>
+        </div>
+      </div>
     </GridItem>
   </Grid>
 </div>
@@ -42,7 +56,6 @@
             {TRANSLATED.BUTTON_NEW_EVALUATION}
           </Button>
           <OpenEvaluation />
-          <AuditorImport />
         </Panel>
       </GridItem>
     {/if}
@@ -70,20 +83,19 @@
   import { getContext } from 'svelte';
   import { useNavigate, useLocation, Link } from 'svelte-navigator';
 
-  import { routes } from '../../data/stores/appStore.js';
-  import evaluationStore from '../../data/stores/evaluationStore.js';
-  import appData from '../../data/app.js';
+  import { routes } from '@app/stores/appStore.js';
+  import evaluationStore from '@app/stores/evaluationStore.js';
+  import locales from '@app/locales/index.json';
 
-  import Button from '../Button.svelte';
-  import AuditorImport from '../Auditor/AuditorImport.svelte';
-  import OpenEvaluation from '../formcomponents/OpenEvaluation.svelte';
-  import Grid from '../Grid.svelte';
-  import GridItem from '../GridItem.svelte';
-  import Header from '../Header.svelte';
-  import LanguageSelect from '../i18n/LanguageSelect.svelte';
-  import NavigationBar from '../NavigationBar.svelte';
-  import Pager from '../Pager.svelte';
-  import Panel from '../Panel.svelte';
+  import Button from '@app/components/ui/Button.svelte';
+  import AuditorImport from '@app/components/ui/Auditor/AuditorImport.svelte';
+  import OpenEvaluation from '@app/components/form/OpenEvaluation.svelte';
+  import Grid from '@app/components/ui/Grid.svelte';
+  import GridItem from '@app/components/ui/GridItem.svelte';
+  import LanguageSelect from '@app/components/ui/LanguageSelect.svelte';
+  import NavigationBar from '@app/components/ui/NavigationBar.svelte';
+  import Pager from '@app/components/ui/Pager.svelte';
+  import Panel from '@app/components/ui/Panel.svelte';
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -97,7 +109,9 @@
       default: 'Your report'
     }),
     STEP: $translate('UI.NAV.STEP', { default: 'step' }),
-    VIEW_REPORT: $translate('UI.NAV.STEP_VIEWREPORT', { default: 'View report' })
+    VIEW_REPORT: $translate('UI.NAV.STEP_VIEWREPORT', {
+      default: 'View report'
+    })
   };
 
   $: hasPanel = $location.pathname !== $routes.VIEW_REPORT.path;

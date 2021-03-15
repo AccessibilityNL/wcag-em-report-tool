@@ -59,12 +59,12 @@ export default function mergeJson(options = {}) {
   return {
     name: 'merge-json',
     buildStart: async function () {
+      verbose && console.log('Merge JSON'.yellow);
+
       let mergeList = [];
 
-      console.log('TARGETS');
       if (Array.isArray(targets) && targets.length) {
         for (const target of targets) {
-          console.log('TARGET:', target);
           if (!isObject(target)) {
             throw new Error(
               `${JSON.stringify(target)} target must be an object`
@@ -83,44 +83,47 @@ export default function mergeJson(options = {}) {
 
           const matchedPaths = await globby(src);
           const basePath = matchedPaths.reduce((result, iPath) => {
-            const dir = path.dirname(iPath);
+            const dirs = path.dirname(iPath).split(path.sep);
 
-            if (result === '') {
-              return dir;
+            if (result.length === 0) {
+              return dirs;
             }
 
-            const isNotInResult = dir.split(path.sep).find((splitDir) => {
-              return result.indexOf(splitDir) === -1;
+            const isNotInResult = dirs.find((dir) => {
+              return result.indexOf(dir) === -1;
             });
 
             if (isNotInResult) {
-              return dir.replace(new RegExp(`${isNotInResult}.*`), '');
+              // return a slice of dirs that are already in the result
+              return dirs.slice(0, dirs.indexOf(isNotInResult));
             }
 
             return result;
-          }, '');
+          }, []);
 
           // remove destiny from matchedPaths to prevent infinite loopings
           if (matchedPaths.indexOf(dest) !== -1) {
             matchedPaths.splice(matchedPaths.indexOf(dest), 1);
           }
 
-          // const basePath from matchedPaths
+          verbose &&
+            console.log(
+              `“${basePath}*”(${matchedPaths.length}) to “${dest}”`.blue
+            );
 
           if (matchedPaths.length) {
             for (const matchedPath of matchedPaths) {
-              if (watch && !isWatched(matchedPath)) {
+              verbose && console.log(`  “${matchedPath}”`);
+
+              if (watch) {
                 this.addWatchFile(matchedPath);
-                watchedFiles.push(matchedPath);
-                verbose &&
-                  console.log(`[merge-json]: Watching “${matchedPath}”`);
               }
 
               // 0. create const wrapPath to use to wrap json
               const wrapKeys = path
                 .dirname(matchedPath)
-                .replace(basePath, '')
                 .split(path.sep)
+                .slice(basePath.length)
                 .concat(path.basename(matchedPath, path.extname(matchedPath)));
 
               // 1. await Read json
@@ -135,9 +138,6 @@ export default function mergeJson(options = {}) {
 
                 // 3. wrapWithPath && Wrap in path objects
                 .then((json) => {
-
-                  verbose && console.log(`[merge-json]: Wrap with path “${wrapKeys}”`);
-
                   if (wrapWithPath) {
                     return wrapWithKeys(json, wrapKeys);
                   }
@@ -158,16 +158,17 @@ export default function mergeJson(options = {}) {
             }
           }
 
-          console.log(mergeList);
-
           // 5. Merge  with result
           // console.log('merged', merge(...mergeList));
 
           // 6. await write result to destiny json (create dirs if required)
           await createDirIfNotExist(dest);
           await writeFile(dest, JSON.stringify(merge.all(mergeList)));
-          // 5. Done
+          // 5. Done; cleanup!!!
+          mergeList = [];
         }
+
+        verbose && watch && console.log('Watching json'.blue);
       }
     }
   };

@@ -2,6 +2,7 @@
   <p>
     {@html TRANSLATED.INTRODUCTION}
   </p>
+  <ResourceLink href="https://www.w3.org/TR/WCAG-EM/#step1">{TRANSLATED.RESOURCE_LINK_NAME}</ResourceLink>
 
   <form method="" novalidate>
     <Input
@@ -67,17 +68,19 @@
 <script>
   import { getContext } from 'svelte';
 
-  import { CONFORMANCE_LEVELS, VERSIONS} from '../../../data/stores/wcagStore.js';
+  import { CONFORMANCE_LEVELS, WCAG_VERSIONS} from '@app/stores/wcagStore.js';
 
-  import Page from '../../Page.svelte';
-  import Input from '../../formcomponents/Input.svelte';
-  import Select from '../../formcomponents/Select.svelte';
-  import Textarea from '../../formcomponents/Textarea.svelte';
+  import Page from '@app/components/ui/Page.svelte';
+  import Input from '@app/components/form/Input.svelte';
+  import Select from '@app/components/form/Select.svelte';
+  import Textarea from '@app/components/form/Textarea.svelte';
+  import ResourceLink from '@app/components/ui/ResourceLink.svelte';
 
   const { scopeStore, translate } = getContext('app');
   $: TRANSLATED = {
     PAGE_TITLE: $translate('PAGES.SCOPE.TITLE'),
     INTRODUCTION: $translate('PAGES.SCOPE.INTRO'),
+    RESOURCE_LINK_NAME: $translate('PAGES.SCOPE.RESOURCE_LINK_NAME'),
     SITE_NAME_LABEL: $translate('PAGES.SCOPE.LABEL_SITE_NAME'),
     SITE_NAME_HELPTEXT: $translate('PAGES.SCOPE.INF_SITE_NAME'),
     SITE_SCOPE_LABEL: $translate('PAGES.SCOPE.LABEL_SITE_SCOPE'),
@@ -100,7 +103,7 @@
   };
 
 
-  let wcagVersions = VERSIONS.map((version) => {
+  let wcagVersions = [...WCAG_VERSIONS].reverse().map((version) => {
     return {
       title: `WCAG ${version}`,
       value: version

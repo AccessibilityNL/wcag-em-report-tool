@@ -1,6 +1,8 @@
+import alias from '@rollup/plugin-alias';
 import babel from '@rollup/plugin-babel';
 import commonjs from '@rollup/plugin-commonjs';
 import copy from 'rollup-plugin-copy';
+// import dynamicImportVars from '@rollup/plugin-dynamic-import-vars';
 import json from '@rollup/plugin-json';
 import livereload from 'rollup-plugin-livereload';
 import mergeJson from './rollup/rollup-plugin-merge-json/index.js';
@@ -9,8 +11,8 @@ import resolve from '@rollup/plugin-node-resolve';
 import serve from 'rollup-plugin-serve';
 import svelte from 'rollup-plugin-svelte';
 import { terser } from 'rollup-plugin-terser';
-
 import pkg from './package.json';
+import locales from './src/locales/index.json';
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -32,20 +34,24 @@ export default {
   },
   plugins: [
     mergeJson({
-      targets: [
-        {
-          src: './src/locales/en/**/*.json',
-          dest: './src/locales/translations_en.json',
-        },
-        {
-          src: './src/locales/nl/**/*.json',
-          dest: './src/locales/translations_nl.json',
-        }
-      ],
+      targets: locales.map((locale) => {
+        return {
+          src: `src/locales/${locale.lang}/**/*.json`,
+          dest: `src/locales/translations_${locale.lang}.json`
+        };
+      }),
       verbose: true,
       watch: true,
       wrapWithPath: true
     }),
+
+    alias({
+      entries: {
+        '@app': './src'
+      }
+    }),
+
+    // dynamicImportVars(),
 
     copy({
       targets: [
@@ -67,7 +73,7 @@ export default {
             let contentsString = contents.toString();
 
             const replacement = {
-              __APP_BUILD_DATE__: new Date(),
+              __APP_BUILD_DATE__: new Date().toISOString(),
               __APP_VERSION__: production ? pkg.version : 'DEVELOPMENT',
               __BASEPATH__: BASEPATH,
               __TITLE__: pkg.name
@@ -118,7 +124,6 @@ export default {
       dedupe: ['svelte']
     }),
     commonjs(),
-    json(),
 
     // Babel used to provide legacy (IE 11) support
     babel({
@@ -142,6 +147,9 @@ export default {
           }
         ]
       ]
+    }),
+    json({
+      compact: production
     }),
 
     // In dev mode, call `npm run start` once
