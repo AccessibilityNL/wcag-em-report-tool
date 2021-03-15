@@ -14,30 +14,20 @@
      * This issue can be resolved with the app router.
      *
      * -->
-    <base href="/wcag-em-report-tool/svelte-preview/" />
+    <base href="/wcag-em-report-tool/preview/" />
 
     <title>WCAG-EM-Report-Tool</title>
     <meta name="theme-color" content="#333333" />
+
+    <!-- WAI Website Components: https://wai-website-theme.netlify.app/components/ -->
+    <link rel="stylesheet" href="https://w3.org/WAI/assets/css/style.css?1573220675560713000" />
 
     <!-- Generated styles -->
     <link href="css/global.css" rel="stylesheet" />
     <link href="bundles/app.css" rel="stylesheet" />
 
-    <!-- WAI Website Components: https://wai-website-theme.netlify.app/components/ -->
-    <link rel="stylesheet" href="https://w3.org/WAI/assets/css/style.css?1573220675560713000" />
     <!-- WAI style corrections -->
     <style>
-      /* Details styling */
-      /*
-       * WAI sets an "icon" on the first child
-       * of the summary (::before) to replace
-       * the disclosure triangle. Prevent that.
-       */
-      #wai-wcag-em-report-tool summary > :first-child::before {
-        display: none;
-        content: none;
-      }
-
       /*
        * This is the current styling of WAI's
        * summary disclosure triangle.
@@ -146,7 +136,7 @@
 
           <p>
             <strong>Status:</strong> Version 2.0.1,
-            Wed Jan 27 2021 16:58:29 GMT+0100 (Central European Standard Time)
+            2021-03-15T19:15:47.674Z
           </p>
 
           <p>
